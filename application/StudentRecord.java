@@ -1,8 +1,10 @@
 import java.util.ArrayList;
+import java.util.List;
+
 public class StudentRecord {
 	private String name;
 	private int id; // Unique
-	private ArrayList<Assignment> assignments;
+	private List<Assignment> assignments;
 	
 	public StudentRecord(String name, int id) {
 		this.name = name;
@@ -14,7 +16,7 @@ public class StudentRecord {
 		assignments.add(assignment);
 	}
 	
-	public void addAssignments(ArrayList<Assignment> assignments) {
+	public void addAssignments(List<Assignment> assignments) {
 		this.assignments.addAll(assignments);
 	}
 	
@@ -30,7 +32,7 @@ public class StudentRecord {
 		return id;
 	}
 	
-	public ArrayList<Assignment> getAssignments() {
+	public List<Assignment> getAssignments() {
 		return assignments;
 	}
 	
@@ -42,7 +44,12 @@ public class StudentRecord {
 		this.id = id;
 	}
 	
-	public void setAssignments(ArrayList<Assignment> assignments) {
+	public void setAssignments(List<Assignment> assignments) {
 		this.assignments = assignments;
+	}
+	
+	@Override
+	public String toString() {
+		return "Name: " + name + " ID: " + id + " " + assignments.size() + " assignment(s)";
 	}
 }
