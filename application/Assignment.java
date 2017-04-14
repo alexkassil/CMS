@@ -4,9 +4,7 @@ import java.util.Date;
 
 public class Assignment {
 
-	public enum assignmentType {
-		HOMEWORK, QUIZ, TEST
-	}
+	
 	
 	private Date dueDate;
 	private int points;
