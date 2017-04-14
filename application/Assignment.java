@@ -8,7 +8,7 @@ public class Assignment {
 	
 	private Date dueDate;
 	private int points;
-	private int score;
+	private double score;
 	private String name;
 	private assignmentType type;
 
@@ -38,7 +38,7 @@ public class Assignment {
 		return points;
 	}
 	
-	public int getScore() {
+	public double getScore() {
 		return score;
 	}
 	
@@ -59,7 +59,7 @@ public class Assignment {
 		this.points = points;
 	}
 	
-	public void setScore(int score) {
+	public void setScore(double score) {
 		this.score = score;
 	}
 	
@@ -77,5 +77,9 @@ public class Assignment {
 		String date = dateFormat.format(dueDate);
 		return "Assignment " + name + " is " + type + ". It is due " + date +
 				" and it's worth " + points + " point(s).";
+	}
+	
+	public String getGrad() {
+		return score + " out of " + points + " points";
 	}
 }
