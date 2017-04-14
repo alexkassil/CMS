@@ -21,8 +21,50 @@ public class Course {
 	// TODO
 	
 	public double getGrade(StudentRecord record) {
-		System.out.println("TODO");
-		return 0;
+		return getHomeworkGradeTotal(record) * homeworkWeight + 
+				getQuizGradeTotal(record) * quizWeight +
+				getTestGradeTotal(record) * testWeight;
+	}
+	
+	public double getHomeworkGradeTotal(StudentRecord record) {
+		return getTotalScores(record, assignmentType.HOMEWORK)/getTotalPoints(record, assignmentType.HOMEWORK);
+	}
+	
+	public double getQuizGradeTotal(StudentRecord record) {
+		return getTotalScores(record, assignmentType.QUIZ)/getTotalPoints(record, assignmentType.QUIZ);
+	}
+	
+	public double getTestGradeTotal(StudentRecord record) {
+		return getTotalScores(record, assignmentType.TEST)/getTotalPoints(record, assignmentType.TEST);
+	}
+	
+	private double getTotalPoints(StudentRecord record, assignmentType type) {
+		List<Assignment> a = record.getAssignments();
+		double points = 0;
+		
+		for(Assignment assignment : a) {
+			if(assignment.getAssignmentType() == type) {
+				points += assignment.getPoints();
+			}
+		}
+		
+		
+		return points;
+	}
+	
+	private double getTotalScores(StudentRecord record, assignmentType type) {
+		
+		List<Assignment> a = record.getAssignments();
+		double scores = 0;
+		
+		for(Assignment assignment : a) {
+			if(assignment.getAssignmentType() == type) {
+				scores += assignment.getScore();
+			}
+		}
+		
+		
+		return scores;
 	}
 	
 	// TODO
