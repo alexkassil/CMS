@@ -2,10 +2,8 @@
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Assignment {
-
-	
-	
+public class Assignment implements Cloneable {
+	private int id;
 	private Date dueDate;
 	private int points;
 	private double score;
@@ -13,7 +11,7 @@ public class Assignment {
 	private assignmentType type;
 
 	// Constructors
-	public Assignment(Date dueDate, int points, String name, assignmentType type) {
+	public Assignment(int id, Date dueDate, int points, String name, assignmentType type) {
 		this.dueDate = dueDate;
 		this.points = points;
 		this.name = name;
@@ -21,12 +19,12 @@ public class Assignment {
 		score = -1;
 	}
 	
-	public Assignment(int points, String name, assignmentType type) {
-		this(new Date(), points, name, type);
+	public Assignment(int id, int points, String name, assignmentType type) {
+		this(id, new Date(), points, name, type);
 	}
 	
-	public Assignment() {
-		this(new Date(), 0, "DEFAULT", assignmentType.HOMEWORK);
+	public Assignment(int id) {
+		this(id, new Date(), 0, "DEFAULT", assignmentType.HOMEWORK);
 	}
 	
 	// Getters
@@ -50,6 +48,10 @@ public class Assignment {
 		return name;
 	}
 	
+	public int getID() {
+		return id;
+	}
+	
 	// Setters
 	public void setDueDate(Date dueDate) {
 		this.dueDate = dueDate;
@@ -71,6 +73,10 @@ public class Assignment {
 		this.name = name;
 	}
 	
+	public void setID(int id){
+		this.id = id;
+	}
+	
 	@Override
 	public String toString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -81,5 +87,12 @@ public class Assignment {
 	
 	public String getGrad() {
 		return score + " out of " + points + " points";
+	}
+	
+	@Override
+	public Object clone() throws CloneNotSupportedException {
+		Assignment assignmentClone = (Assignment)super.clone();
+		assignmentClone.setDueDate((Date)(this.getDueDate().clone()));
+		return assignmentClone;
 	}
 }
