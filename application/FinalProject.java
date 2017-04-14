@@ -19,9 +19,10 @@ public class FinalProject {
 		
 		StudentRecord[] records = {sr1, sr2, sr3};
 		
-		for(StudentRecord record: records) {
-			System.out.println(record);
-		}
+		Course Math54 = new Course("MATH54", Arrays.asList(records));
+		Math54.addAssignments(Arrays.asList(assignments));
+		System.out.println(Math54);
+		System.out.println(Math54.weights());
 	}
 
 }
