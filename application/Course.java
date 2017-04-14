@@ -13,86 +13,79 @@ public class Course {
 		this.records = records;
 		assignments = new ArrayList<Assignment>();
 	}
-	
+
 	public Course(String courseID) {
 		this(courseID, new ArrayList<StudentRecord>());
 	}
-	
-	// TODO
-	
+
 	public double getGrade(StudentRecord record) {
-		return getHomeworkGradeTotal(record) * homeworkWeight + 
-				getQuizGradeTotal(record) * quizWeight +
-				getTestGradeTotal(record) * testWeight;
+		return getHomeworkGradeTotal(record) * homeworkWeight + getQuizGradeTotal(record) * quizWeight
+				+ getTestGradeTotal(record) * testWeight;
 	}
-	
+
 	public double getHomeworkGradeTotal(StudentRecord record) {
-		return getTotalScores(record, assignmentType.HOMEWORK)/getTotalPoints(record, assignmentType.HOMEWORK);
+		return getTotalScores(record, assignmentType.HOMEWORK) / getTotalPoints(record, assignmentType.HOMEWORK);
 	}
-	
+
 	public double getQuizGradeTotal(StudentRecord record) {
-		return getTotalScores(record, assignmentType.QUIZ)/getTotalPoints(record, assignmentType.QUIZ);
+		return getTotalScores(record, assignmentType.QUIZ) / getTotalPoints(record, assignmentType.QUIZ);
 	}
-	
+
 	public double getTestGradeTotal(StudentRecord record) {
-		return getTotalScores(record, assignmentType.TEST)/getTotalPoints(record, assignmentType.TEST);
+		return getTotalScores(record, assignmentType.TEST) / getTotalPoints(record, assignmentType.TEST);
 	}
-	
+
 	private double getTotalPoints(StudentRecord record, assignmentType type) {
 		List<Assignment> a = record.getAssignments();
 		double points = 0;
-		
-		for(Assignment assignment : a) {
-			if(assignment.getAssignmentType() == type) {
+
+		for (Assignment assignment : a) {
+			if (assignment.getAssignmentType() == type) {
 				points += assignment.getPoints();
 			}
 		}
-		
-		
+
 		return points;
 	}
-	
+
 	private double getTotalScores(StudentRecord record, assignmentType type) {
-		
+
 		List<Assignment> a = record.getAssignments();
 		double scores = 0;
-		
-		for(Assignment assignment : a) {
-			if(assignment.getAssignmentType() == type) {
+
+		for (Assignment assignment : a) {
+			if (assignment.getAssignmentType() == type) {
 				scores += assignment.getScore();
 			}
 		}
-		
-		
+
 		return scores;
 	}
-	
-	// TODO
-	
-	public void assign(Assignment assignment) {
-		System.out.println("TODO");
 
+	public void assign(Assignment assignment) throws CloneNotSupportedException {
+		for (StudentRecord record : records) {
+			record.addAssignment((Assignment)(assignment.clone()));
+		}
 	}
-	
-	// TODO
-	
-	public void assign(List<Assignment> assignments) {
-		System.out.println("TODO");
 
+	public void assign(List<Assignment> assignments) throws CloneNotSupportedException {
+		for(Assignment assignment : assignments) {
+			assign(assignment);
+		}
 	}
-	
+
 	public void addAssignment(Assignment assignment) {
 		assignments.add(assignment);
 	}
-	
+
 	public void addAssignments(List<Assignment> assignments) {
 		this.assignments.addAll(assignments);
 	}
-	
-	public void assignAll() {
+
+	public void assignAll() throws CloneNotSupportedException {
 		assign(assignments);
 	}
-	
+
 	public String getCourseID() {
 		return courseID;
 	}
@@ -143,12 +136,10 @@ public class Course {
 
 	@Override
 	public String toString() {
-		return courseID + " " + assignments.size() + " assignment(s) and " + records.size() + 
-				" record(s)";
+		return courseID + " " + assignments.size() + " assignment(s) and " + records.size() + " record(s)";
 	}
-	
+
 	public String weights() {
-		return "Homework Weight: " + homeworkWeight + "\nQuiz Weight: " + quizWeight + 
-				"\nTest Weight:" + testWeight;
+		return "Homework Weight: " + homeworkWeight + "\nQuiz Weight: " + quizWeight + "\nTest Weight:" + testWeight;
 	}
 }
