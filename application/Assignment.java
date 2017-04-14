@@ -1,4 +1,5 @@
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Assignment {
@@ -74,7 +75,9 @@ public class Assignment {
 	
 	@Override
 	public String toString() {
-		return "Assignment " + name + " is " + type + ", is due " + dueDate.toString() +
-				", and is worth " + points + " point(s)";
+		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+		String date = dateFormat.format(dueDate);
+		return "Assignment " + name + " is " + type + ". It is due " + date +
+				" and it's worth " + points + " point(s).";
 	}
 }
