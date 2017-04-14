@@ -3,7 +3,7 @@ import java.util.Date;
 
 public class Assignment {
 
-	public enum Type {
+	public enum assignmentType {
 		HOMEWORK, QUIZ, TEST
 	}
 	
@@ -11,10 +11,10 @@ public class Assignment {
 	private int points;
 	private int score;
 	private String name;
-	private Type type;
+	private assignmentType type;
 
 	// Constructors
-	public Assignment(Date dueDate, int points, String name, Type type) {
+	public Assignment(Date dueDate, int points, String name, assignmentType type) {
 		this.dueDate = dueDate;
 		this.points = points;
 		this.name = name;
@@ -22,12 +22,12 @@ public class Assignment {
 		score = -1;
 	}
 	
-	public Assignment(int points, String name, Type type) {
+	public Assignment(int points, String name, assignmentType type) {
 		this(new Date(), points, name, type);
 	}
 	
 	public Assignment() {
-		this(new Date(), 0, "DEFAULT", Type.HOMEWORK);
+		this(new Date(), 0, "DEFAULT", assignmentType.HOMEWORK);
 	}
 	
 	// Getters
@@ -43,7 +43,7 @@ public class Assignment {
 		return score;
 	}
 	
-	public Type getType() {
+	public assignmentType getAssignmentType() {
 		return type;
 	}
 	
@@ -64,7 +64,7 @@ public class Assignment {
 		this.score = score;
 	}
 	
-	public void setType(Type type) {
+	public void setassignmentType(assignmentType type) {
 		this.type = type;
 	}
 	
