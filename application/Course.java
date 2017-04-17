@@ -1,3 +1,4 @@
+package project;
 import java.util.*;
 
 public class Course {
@@ -35,7 +36,7 @@ public class Course {
 		return getTotalScores(record, assignmentType.TEST) / getTotalPoints(record, assignmentType.TEST);
 	}
 
-	private double getTotalPoints(StudentRecord record, assignmentType type) {
+	public double getTotalPoints(StudentRecord record, assignmentType type) {
 		List<Assignment> a = record.getAssignments();
 		double points = 0;
 
