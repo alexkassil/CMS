@@ -18,6 +18,15 @@ public class Course {
 	public Course(String courseID) {
 		this(courseID, new ArrayList<StudentRecord>());
 	}
+	
+	public void gradeAssignment(StudentRecord record, int assignmentID, double score) {
+		List<Assignment> a = record.getAssignments();
+		for(Assignment assignment: a) {
+			if(assignment.getID() == assignmentID) {
+				assignment.setScore(score);
+			}
+		}
+	}
 
 	public double getGrade(StudentRecord record) {
 		return getHomeworkGradeTotal(record) * homeworkWeight + getQuizGradeTotal(record) * quizWeight

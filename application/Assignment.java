@@ -13,6 +13,7 @@ public class Assignment implements Cloneable {
 
 	// Constructors
 	public Assignment(int id, Date dueDate, int points, String name, assignmentType type) {
+		this.id = id;
 		this.dueDate = dueDate;
 		this.points = points;
 		this.name = name;
@@ -82,17 +83,18 @@ public class Assignment implements Cloneable {
 	public String toString() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		String date = dateFormat.format(dueDate);
-		return "Assignment " + name + " is " + type + ". It is due " + date +
+		return id + " Assignment " + name + " is " + type + ". It is due " + date +
 				" and it's worth " + points + " point(s).";
 	}
 	
-	public String getGrad() {
+	public String getGrade() {
 		return score + " out of " + points + " points";
 	}
 	
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		Assignment assignmentClone = (Assignment)super.clone();
+		assignmentClone.setID(this.getID());
 		assignmentClone.setDueDate((Date)(this.getDueDate().clone()));
 		return assignmentClone;
 	}

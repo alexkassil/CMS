@@ -52,4 +52,16 @@ public class StudentRecord {
 	public String toString() {
 		return "Name: " + name + " ID: " + id + " " + assignments.size() + " assignment(s)";
 	}
+	
+	public void printAssignments() {
+		for(Assignment a : assignments) {
+			System.out.println(a);
+		}
+	}
+	
+	public void printGrades() {
+		for(Assignment a : assignments) {
+			System.out.println(a.getGrade());
+		}
+	}
 }
