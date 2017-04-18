@@ -18,6 +18,8 @@ public class Course {
 	public Course(String courseID) {
 		this(courseID, new ArrayList<StudentRecord>());
 	}
+
+	
 	
 	public void gradeAssignment(StudentRecord record, int assignmentID, double score) {
 		List<Assignment> a = record.getAssignments();
@@ -151,5 +153,14 @@ public class Course {
 
 	public String weights() {
 		return "Homework Weight: " + homeworkWeight + "\nQuiz Weight: " + quizWeight + "\nTest Weight:" + testWeight;
+	}
+	
+	@Override
+	public boolean equals(Object otherCourse) {
+		if(!(otherCourse instanceof Course)) {
+			return false;
+		}
+		
+		return ((Course)otherCourse).getCourseID().equals(this.getCourseID());
 	}
 }
