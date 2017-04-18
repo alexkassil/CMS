@@ -1,46 +1,94 @@
 package project;
+
 import java.util.*;
 
-public class FinalProject {
+import javafx.application.Application;
+import javafx.stage.Stage;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.layout.Pane;
 
-	public static void main(String[] args) throws CloneNotSupportedException {
-		Assignment assignment0 = new Assignment(0, 7, "HW 0", assignmentType.HOMEWORK);
-		Assignment assignment1 = new Assignment(1, 15, "HW 1", assignmentType.HOMEWORK);
-		Assignment assignment2 = new Assignment(2, new Date(), 20, "QUIZ 1", assignmentType.QUIZ);
-		Assignment assignment3 = new Assignment(3, 100, "Test 1", assignmentType.TEST);
-		Assignment[] assignments = {assignment0, assignment1, assignment2, assignment3};
-		
-		List<Assignment> assignmentsList = new ArrayList(Arrays.asList(assignments));
-		
-		StudentRecord sr1 = new StudentRecord("Charles Smith", 000);		
-		StudentRecord sr2 = new StudentRecord("Charles Smith", 001);		
-		StudentRecord sr3 = new StudentRecord("George MacDonald", 002);
-		
-		List<StudentRecord> records = new ArrayList<StudentRecord>();
-		records.add(sr1);
-		records.add(sr2);
-		records.add(sr3);
-		
-		Course Math54 = new Course("MATH54", records);
-		Math54.addAssignments(assignmentsList);
-		
-		Math54.setHomeworkWeight(.2);
-		Math54.setQuizWeight(.3);
-		Math54.setTestWeight(.5);
+public class FinalProject extends Application {
 
-		System.out.println(Math54);
-		System.out.println(Math54.weights());
-		Math54.assignAll();
+	public static void main(String[] args) {
+		Application.launch(args);
+	}
+	
+	@Override
+	public void start(Stage primaryStage) {
+		CoursePane pane = new CoursePane();
 		
-		Math54.gradeAssignment(sr1, 0, 6);
-		Math54.gradeAssignment(sr1, 1, 14);
-		Math54.gradeAssignment(sr1, 2, 19);
-		Math54.gradeAssignment(sr1, 3, 99);
-		
-		sr1.printGrades();
-		System.out.println(Math54.getGrade(sr1));
-		
-		
+		Scene scene = new Scene(pane, 600, 600);
+		primaryStage.setTitle("Courses");
+		primaryStage.setScene(scene);
+		primaryStage.show();
 	}
 
+}
+
+class CoursePane extends BorderPane {
+	String title;
+	ArrayList<Course> courses;
+	HBox courseButtons;
+	FlowPane courseLinks;
+	TextField addCourseTF;
+	
+	CoursePane() {
+		title = "Courses";
+		courses = new ArrayList<Course>();
+		
+		courseButtons = new HBox(10);
+		courseButtons.setAlignment(Pos.CENTER);
+		
+		Text addCourseText = new Text("Add Course: ");
+		addCourseTF = new TextField("Course ID");
+		addCourseTF.setOnAction(e -> addCourse());
+		
+		courseButtons.getChildren().addAll(addCourseText, addCourseTF);
+		
+		courseLinks = new FlowPane();
+		courseLinks.setPadding(new Insets(10, 10, 10, 10));
+		courseLinks.setHgap(50);
+		
+		courseLinks.getChildren().add(new Text("No Courses"));
+		
+		setCenter(courseLinks);
+		setBottom(courseButtons);
+	}
+	
+	void addCourse() {
+		String courseID = addCourseTF.getText();
+		
+		if(courseID.length() < 3) {
+			error("Course ID must be at least 3 characters");
+			return;
+		}
+		
+		System.out.println(courses.size());
+		if(courses.size() == 0) {
+			courseLinks.getChildren().clear();
+		}
+		Course newCourse = new Course(courseID);
+		Button newCourseBT = new Button(courseID);
+		
+		if(courses.contains(newCourse)) {
+			error(courseID + " is already a course");
+			return;
+		}
+		
+		courses.add(newCourse);
+		courseLinks.getChildren().add(newCourseBT);
+		
+	}
+	
+	void error(String error) {
+		System.out.println(error);
+	}
 }
