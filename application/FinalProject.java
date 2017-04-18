@@ -39,6 +39,7 @@ class CoursePane extends BorderPane {
 	HBox courseButtons;
 	FlowPane courseLinks;
 	TextField addCourseTF;
+	TextField removeCourseTF;
 	
 	CoursePane() {
 		title = "Courses";
@@ -51,7 +52,12 @@ class CoursePane extends BorderPane {
 		addCourseTF = new TextField("Course ID");
 		addCourseTF.setOnAction(e -> addCourse());
 		
-		courseButtons.getChildren().addAll(addCourseText, addCourseTF);
+		Text removeCourseText = new Text("Remove Course: ");
+		removeCourseTF = new TextField("Course ID");
+		removeCourseTF.setOnAction(e -> removeCourse());
+		
+		courseButtons.getChildren().addAll(addCourseText, addCourseTF, 
+				removeCourseText, removeCourseTF);
 		
 		courseLinks = new FlowPane();
 		courseLinks.setPadding(new Insets(10, 10, 10, 10));
@@ -65,6 +71,7 @@ class CoursePane extends BorderPane {
 	
 	void addCourse() {
 		String courseID = addCourseTF.getText();
+		addCourseTF.setText("");
 		
 		if(courseID.length() < 3) {
 			error("Course ID must be at least 3 characters");
@@ -85,6 +92,34 @@ class CoursePane extends BorderPane {
 		
 		courses.add(newCourse);
 		courseLinks.getChildren().add(newCourseBT);
+		
+	}
+	
+	void removeCourse() {
+		String courseID = removeCourseTF.getText();
+		removeCourseTF.setText("");
+		
+		Course newCourse = new Course(courseID);
+		
+		if(!courses.contains(newCourse)) {
+			error("Course ID does not match");
+			return;
+		}
+		
+		
+		
+		for(int i = 0; i < courses.size(); i++) {
+			Button currentButton = (Button)courseLinks.getChildren().get(i);
+			if(currentButton.getText().equals(courseID)) {
+				courseLinks.getChildren().remove(i);
+				courses.remove(newCourse);
+			}
+		}
+		
+		if(courses.size() == 0) {
+			courseLinks.getChildren().add(new Text("No Courses"));
+		}
+		
 		
 	}
 	
