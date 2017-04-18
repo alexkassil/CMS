@@ -94,7 +94,6 @@ public class Assignment implements Cloneable {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		Assignment assignmentClone = (Assignment)super.clone();
-		assignmentClone.setID(this.getID());
 		assignmentClone.setDueDate((Date)(this.getDueDate().clone()));
 		return assignmentClone;
 	}
