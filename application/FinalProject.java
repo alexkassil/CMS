@@ -15,12 +15,14 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 
 public class FinalProject extends Application {
+	ArrayList<Course> courses = new ArrayList<Course>();
 	Label message = new Label("test");
 	
 	@Override
@@ -43,7 +45,7 @@ public class FinalProject extends Application {
 		// Selecting options
 		cb.setOnAction(e -> {
 			if(cb.getValue().equals("Create Course")) {
-				System.out.println("1");
+				System.out.println(createCourse());
 			} else if (cb.getValue().equals("Update Course")) {
 				System.out.println("2");
 			} else if (cb.getValue().equals("Add Student")) {
@@ -74,6 +76,15 @@ public class FinalProject extends Application {
 		primaryStage.show();
 	}
 
+	public GridPane createCourse() {
+		GridPane createCourse = new GridPane();
+		
+		
+		
+		
+		return createCourse;
+	}
+	
 	
 	public static void main(String[] args) {
 		Application.launch(args);
