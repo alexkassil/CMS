@@ -45,7 +45,7 @@ public class FinalProject extends Application {
 		// Selecting options
 		cb.setOnAction(e -> {
 			if(cb.getValue().equals("Create Course")) {
-				System.out.println(createCourse());
+				pane.setCenter(createCourse());
 			} else if (cb.getValue().equals("Update Course")) {
 				System.out.println("2");
 			} else if (cb.getValue().equals("Add Student")) {
@@ -78,9 +78,37 @@ public class FinalProject extends Application {
 
 	public GridPane createCourse() {
 		GridPane createCourse = new GridPane();
+		createCourse.setAlignment(Pos.CENTER);
+		createCourse.setHgap(20);
+		createCourse.setVgap(20);
 		
+		Text courseID = new Text("Course ID: ");
+		TextField tfCourseID = new TextField();
 		
+		createCourse.add(courseID, 0, 0);
+		createCourse.add(tfCourseID, 1, 0);
 		
+		Text hwWeight = new Text("HW Weight: ");
+		TextField tfHwWeight = new TextField();
+		
+		createCourse.add(hwWeight, 0, 1);
+		createCourse.add(tfHwWeight, 1, 1);
+		
+		Text quizWeight = new Text("Quiz Weight: ");
+		TextField tfQuizWeight = new TextField();
+		
+		createCourse.add(quizWeight, 0, 2);
+		createCourse.add(tfQuizWeight, 1, 2);
+		
+		Text testWeight = new Text("Test Weight: ");
+		TextField tfTestWeight = new TextField();
+		
+		createCourse.add(testWeight, 0, 3);
+		createCourse.add(tfTestWeight, 1, 3);
+		
+		Button btCreateCourse = new Button("Create Course");
+		
+		createCourse.add(btCreateCourse, 1, 4);
 		
 		return createCourse;
 	}
