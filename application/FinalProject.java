@@ -6,7 +6,12 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -16,21 +21,64 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
 
 public class FinalProject extends Application {
+	Label message = new Label("test");
+	
+	@Override
+	public void start(Stage primaryStage) {
+		// Main pane
+		BorderPane pane = new BorderPane();
+		
+		// Pane for ComboBox
+		FlowPane pickPane = new FlowPane();
+		pickPane.setPadding(new Insets(10, 10, 10, 10));
+		pickPane.setAlignment(Pos.CENTER);
+		
+		Text select = new Text(10, 10, "Select from services: ");
+		ComboBox<String> cb = new ComboBox<>();
+		cb.setPrefWidth(600);
+		
+		// ComboBox Options
+		cb.getItems().addAll("Create Course", "Update Course", "Add Student", "Add Assignment", "Grade Assignment");
+		
+		// Selecting options
+		cb.setOnAction(e -> {
+			if(cb.getValue().equals("Create Course")) {
+				System.out.println("1");
+			} else if (cb.getValue().equals("Update Course")) {
+				System.out.println("2");
+			} else if (cb.getValue().equals("Add Student")) {
+				System.out.println("3");
+			} else if (cb.getValue().equals("Add Assignment")) {
+				System.out.println("4");
+			} else if (cb.getValue().equals("Grade Assignment")) {
+				System.out.println("5");
+			}
+		});
+		
+		pickPane.getChildren().addAll(select, cb);
+		
+		// message formatting
+		HBox hbMessage = new HBox(10);
+		hbMessage.setAlignment(Pos.CENTER);
+		hbMessage.getChildren().add(message);
+		message.setPadding(new Insets(5, 10, 10, 5));
+		message.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 16));
+		
 
+		pane.setTop(pickPane);
+		pane.setBottom(hbMessage);
+		
+		Scene scene = new Scene(pane, 750, 750);
+		primaryStage.setScene(scene);
+		primaryStage.setTitle("Kassil's Course Management Service");
+		primaryStage.show();
+	}
+
+	
 	public static void main(String[] args) {
 		Application.launch(args);
 	}
 	
-	@Override
-	public void start(Stage primaryStage) {
-		CoursePane pane = new CoursePane();
-		
-		Scene scene = new Scene(pane, 600, 600);
-		primaryStage.setTitle("Courses");
-		primaryStage.setScene(scene);
-		primaryStage.show();
-	}
-
 }
 
 class CoursePane extends BorderPane {
@@ -127,3 +175,5 @@ class CoursePane extends BorderPane {
 		System.out.println(error);
 	}
 }
+
+
