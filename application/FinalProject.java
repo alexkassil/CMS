@@ -47,7 +47,7 @@ public class FinalProject extends Application {
 			if(cb.getValue().equals("Create Course")) {
 				pane.setCenter(createCourse());
 			} else if (cb.getValue().equals("Update Course")) {
-				System.out.println("2");
+				pane.setCenter(updateCourse());
 			} else if (cb.getValue().equals("Add Student")) {
 				System.out.println("3");
 			} else if (cb.getValue().equals("Add Assignment")) {
@@ -82,6 +82,7 @@ public class FinalProject extends Application {
 		createCourse.setHgap(20);
 		createCourse.setVgap(20);
 		
+		// GUI
 		Text courseID = new Text("Course ID: ");
 		TextField tfCourseID = new TextField();
 		
@@ -110,9 +111,58 @@ public class FinalProject extends Application {
 		
 		createCourse.add(btCreateCourse, 1, 4);
 		
+		// Logic
+		
 		return createCourse;
 	}
 	
+	public GridPane updateCourse() {
+		GridPane updateCourse = new GridPane();
+		updateCourse.setAlignment(Pos.CENTER);
+		updateCourse.setHgap(20);
+		updateCourse.setVgap(20);
+		
+		// GUI
+		Text courseID = new Text("Course ID: ");
+		TextField tfCourseID = new TextField();
+		
+		updateCourse.add(courseID, 0, 0);
+		updateCourse.add(tfCourseID, 1, 0);
+		
+		Text newCourseID = new Text("New Course ID: ");
+		TextField newTfCourseID = new TextField();
+		
+		updateCourse.add(newCourseID, 0, 1);
+		updateCourse.add(newTfCourseID, 1, 1);
+		
+		Text newHwWeight = new Text("New HW Weight: ");
+		TextField newTfHwWeight = new TextField();
+		
+		updateCourse.add(newHwWeight, 0, 2);
+		updateCourse.add(newTfHwWeight, 1, 2);
+		
+		Text newQuizWeight = new Text("New Quiz Weight: ");
+		TextField newTfQuizWeight = new TextField();
+		
+		updateCourse.add(newQuizWeight, 0, 3);
+		updateCourse.add(newTfQuizWeight, 1, 3);
+		
+		Text newTestWeight = new Text("New Test Weight: ");
+		TextField newTfTestWeight = new TextField();
+		
+		updateCourse.add(newTestWeight, 0, 4);
+		updateCourse.add(newTfTestWeight, 1, 4);
+		
+		Button btUpdateCourse = new Button("Update Course");
+		
+		updateCourse.add(btUpdateCourse, 1, 5);
+		
+		// Logic
+		
+		return updateCourse;
+	}
+	
+	public 
 	
 	public static void main(String[] args) {
 		Application.launch(args);
