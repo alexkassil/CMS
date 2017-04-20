@@ -203,6 +203,49 @@ public class FinalProject extends Application {
 		
 		// GUI
 		
+		Text courseID = new Text("Course ID: ");
+		TextField tfCourseID = new TextField();
+		
+		addAssignment.add(courseID, 0, 0);
+		addAssignment.add(tfCourseID, 1, 0);
+		
+		Text assignmentType = new Text("Assignment Type: ");
+		ComboBox cbAssignmentType = new ComboBox();
+		
+		cbAssignmentType.setMinWidth(200);
+		cbAssignmentType.getItems().addAll("Homework", "Quiz", "Test");
+		cbAssignmentType.setValue("Homework");
+		
+		addAssignment.add(assignmentType, 0, 1);
+		addAssignment.add(cbAssignmentType, 1, 1);
+		
+		Text assignmentID = new Text("Assignment ID: ");
+		TextField tfAssignmentID = new TextField();
+		
+		addAssignment.add(assignmentID, 0, 2);
+		addAssignment.add(tfAssignmentID, 1, 2);
+		
+		Text assignmentName = new Text("Assignment Name: ");
+		TextField tfAssignmentName = new TextField();
+		
+		addAssignment.add(assignmentName, 0, 3);
+		addAssignment.add(tfAssignmentName, 1, 3);
+		
+		Text assignmentPoints = new Text("Assignment Points: ");
+		TextField tfAssignmentPoints = new TextField();
+		
+		addAssignment.add(assignmentPoints, 0, 4);
+		addAssignment.add(tfAssignmentPoints, 1, 4);
+		
+		Text dueDate = new Text("Due Date: ");
+		TextField tfDueDate = new TextField();
+		
+		addAssignment.add(dueDate, 0, 5);
+		addAssignment.add(tfDueDate, 1, 5);
+		
+		Button btAddAssignment = new Button("Add Assignment");
+		
+		addAssignment.add(btAddAssignment, 1, 6);
 		
 		return addAssignment;
 	}
