@@ -23,6 +23,7 @@ public class Course {
 		this.homeworkWeight = hwWeight;
 		this.quizWeight = quizWeight;
 		this.testWeight = testWeight;
+		assignments = new ArrayList<Assignment>();
 	}
 	
 	public Course(String courseID, double hwWeight, double quizWeight, double testWeight) {

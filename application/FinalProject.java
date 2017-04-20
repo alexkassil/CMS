@@ -58,6 +58,7 @@ public class FinalProject extends Application {
 			} else if (cb.getValue().equals("Grade Assignment")) {
 				pane.setCenter(gradeAssignment());
 			}
+			clear();
 		});
 
 		pickPane.getChildren().addAll(select, cb);
@@ -126,6 +127,7 @@ public class FinalProject extends Application {
 			
 			if(courseName.length() < 3) {
 				message("Course ID must be at least 3 characters", Color.RED);
+				return;
 			}
 			
 			try {
@@ -134,9 +136,10 @@ public class FinalProject extends Application {
 				test = Double.parseDouble(tfTestWeight.getText());
 			} catch (Exception ex) {
 				message("HW Weight, Quiz Weight, and Test Weight must all be numbers", Color.RED);
+				return;
 			}
 			
-			System.out.println(courseName + " " + hw + " " + quiz + " " + test);
+			//System.out.println(courseName + " " + hw + " " + quiz + " " + test);
 			
 			double total = hw + quiz + test;
 			hwPercent = hw / total;
@@ -144,7 +147,15 @@ public class FinalProject extends Application {
 			testPercent = test / total;
 			
 			Course newCourse = new Course(courseName, hwPercent, quizPercent, testPercent);
+			if(courses.contains(newCourse)) {
+				message("Another Course already has this Course ID", Color.RED);
+				return;
+			}
 			
+			courses.add(newCourse);
+			//System.out.println(newCourse.weights());
+			
+			message("Course " + courseName + " added", Color.GREEN);
 			
 			
 		});
