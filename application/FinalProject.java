@@ -8,7 +8,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
@@ -20,6 +22,7 @@ import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 public class FinalProject extends Application {
 	ArrayList<Course> courses = new ArrayList<Course>();
@@ -53,7 +56,7 @@ public class FinalProject extends Application {
 			} else if (cb.getValue().equals("Add Assignment")) {
 				pane.setCenter(addAssignment());
 			} else if (cb.getValue().equals("Grade Assignment")) {
-				System.out.println("5");
+				pane.setCenter(gradeAssignment());
 			}
 		});
 
@@ -248,6 +251,56 @@ public class FinalProject extends Application {
 		addAssignment.add(btAddAssignment, 1, 6);
 		
 		return addAssignment;
+	}
+	
+	public GridPane gradeAssignment() {
+		GridPane gradeAssignment = new GridPane();
+		gradeAssignment.setAlignment(Pos.CENTER);
+		gradeAssignment.setHgap(20);
+		gradeAssignment.setVgap(20);
+		
+		// GUI
+		Text courseID = new Text("Course ID: ");
+		TextField tfCourseID = new TextField();
+		
+		gradeAssignment.add(courseID, 0, 0);
+		gradeAssignment.add(tfCourseID, 1, 0);
+		
+		Text assignmentID = new Text("Assignment ID: ");
+		TextField tfAssignmentID = new TextField();
+		
+		gradeAssignment.add(assignmentID, 0, 1);
+		gradeAssignment.add(tfAssignmentID, 1, 1);
+		
+		Text grade = new Text("Grade: ");
+		TextField tfGrade = new TextField();
+		
+		gradeAssignment.add(grade, 0, 2);
+		gradeAssignment.add(tfGrade, 1, 2);
+		
+		RadioButton rbRaw = new RadioButton("Raw Grade");
+		RadioButton rbPercentage = new RadioButton("Percentange");
+		
+		ToggleGroup tgGrade = new ToggleGroup();
+		rbRaw.setToggleGroup(tgGrade);
+		rbPercentage.setToggleGroup(tgGrade);
+		rbRaw.setSelected(true);
+		
+		gradeAssignment.add(rbRaw, 0, 3);
+		gradeAssignment.add(rbPercentage, 1, 3);
+		
+		Button btGradeAssignment = new Button("Grade Assignment");
+		
+		gradeAssignment.add(btGradeAssignment, 1, 4);
+		
+		// Logic
+		
+		return gradeAssignment;
+	}
+	
+	public void message(String message, Color color) {
+		this.message.setText(message);
+		this.message.setTextFill(color);
 	}
 
 	public static void main(String[] args) {
