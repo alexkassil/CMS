@@ -77,6 +77,13 @@ public class FinalProject extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.setTitle("Kassil's Course Management Service");
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(e -> {
+			primaryStage.close();
+			for(Course c : courses) {
+				System.out.println(c);
+				System.out.println(c.weights());
+			}
+		});
 	}
 
 	public GridPane createCourse() {
