@@ -96,6 +96,10 @@ public class Course {
 			assign(assignment);
 		}
 	}
+	
+	public void addRecord(StudentRecord record) {
+		records.add(record);
+	}
 
 	public void addAssignment(Assignment assignment) {
 		assignments.add(assignment);
@@ -159,6 +163,9 @@ public class Course {
 
 	@Override
 	public String toString() {
+		return courseID;
+	}
+	public String courseInfo() {
 		return courseID + " " + assignments.size() + " assignment(s) and " + records.size() + " record(s)";
 	}
 
