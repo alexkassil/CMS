@@ -114,6 +114,40 @@ public class FinalProject extends Application {
 		createCourse.add(btCreateCourse, 1, 4);
 
 		// Logic
+		
+		btCreateCourse.setOnAction(e -> {
+			String courseName = tfCourseID.getText();
+			double hw = 0;
+			double quiz = 0;
+			double test = 0;
+			double hwPercent = 0;
+			double quizPercent = 0;
+			double testPercent = 0;
+			
+			if(courseName.length() < 3) {
+				message("Course ID must be at least 3 characters", Color.RED);
+			}
+			
+			try {
+				hw = Double.parseDouble(tfHwWeight.getText());
+				quiz = Double.parseDouble(tfQuizWeight.getText());
+				test = Double.parseDouble(tfTestWeight.getText());
+			} catch (Exception ex) {
+				message("HW Weight, Quiz Weight, and Test Weight must all be numbers", Color.RED);
+			}
+			
+			System.out.println(courseName + " " + hw + " " + quiz + " " + test);
+			
+			double total = hw + quiz + test;
+			hwPercent = hw / total;
+			quizPercent = quiz / total;
+			testPercent = test / total;
+			
+			Course newCourse = new Course(courseName, hwPercent, quizPercent, testPercent);
+			
+			
+			
+		});
 
 		return createCourse;
 	}
@@ -301,6 +335,10 @@ public class FinalProject extends Application {
 	public void message(String message, Color color) {
 		this.message.setText(message);
 		this.message.setTextFill(color);
+	}
+	
+	public void clear() {
+		this.message.setText("");
 	}
 
 	public static void main(String[] args) {
