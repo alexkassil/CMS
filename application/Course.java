@@ -163,7 +163,8 @@ public class Course {
 	}
 
 	public String weights() {
-		return "Homework Weight: " + homeworkWeight + "\nQuiz Weight: " + quizWeight + "\nTest Weight:" + testWeight;
+		String weights = String.format("Homework Weight: %.2f\nQuiz Weight: %.2f\nTestWeight %.2f", homeworkWeight, quizWeight, testWeight);
+		return weights;
 	}
 	
 	@Override
