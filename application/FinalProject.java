@@ -1,5 +1,7 @@
 package project;
 
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.*;
 
 import javafx.application.Application;
@@ -25,7 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class FinalProject extends Application {
-	ArrayList<Course> courses = new ArrayList<Course>();
+	static ArrayList<Course> courses = new ArrayList<Course>();
 	Label message = new Label("test");
 
 	@Override
@@ -342,19 +344,19 @@ public class FinalProject extends Application {
 		// GUI
 		
 		Text courseID = new Text("Course ID: ");
-		TextField tfCourseID = new TextField();
+		ComboBox<Course> cbCourses = coursesComboBox();
 		
 		addAssignment.add(courseID, 0, 0);
-		addAssignment.add(tfCourseID, 1, 0);
+		addAssignment.add(cbCourses, 1, 0);
 		
-		Text assignmentType = new Text("Assignment Type: ");
-		ComboBox cbAssignmentType = new ComboBox();
+		Text assignmentTypeText = new Text("Assignment Type: ");
+		ComboBox<assignmentType> cbAssignmentType = new ComboBox<>();
 		
 		cbAssignmentType.setMinWidth(170);
-		cbAssignmentType.getItems().addAll("Homework", "Quiz", "Test");
-		cbAssignmentType.setValue("Homework");
+		cbAssignmentType.getItems().addAll(assignmentType.HOMEWORK, assignmentType.QUIZ, assignmentType.TEST);
+		cbAssignmentType.setValue(assignmentType.HOMEWORK);
 		
-		addAssignment.add(assignmentType, 0, 1);
+		addAssignment.add(assignmentTypeText, 0, 1);
 		addAssignment.add(cbAssignmentType, 1, 1);
 		
 		Text assignmentID = new Text("Assignment ID: ");
@@ -375,7 +377,7 @@ public class FinalProject extends Application {
 		addAssignment.add(assignmentPoints, 0, 4);
 		addAssignment.add(tfAssignmentPoints, 1, 4);
 		
-		Text dueDate = new Text("Due Date: ");
+		Text dueDate = new Text("Due Date: (MM/dd/yyyy) ");
 		TextField tfDueDate = new TextField();
 		
 		addAssignment.add(dueDate, 0, 5);
@@ -384,6 +386,69 @@ public class FinalProject extends Application {
 		Button btAddAssignment = new Button("Add Assignment");
 		
 		addAssignment.add(btAddAssignment, 1, 6);
+		
+		// Logic
+		
+		btAddAssignment.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			assignmentType type = cbAssignmentType.getValue();
+			
+			int id = -1;
+			try {
+				id = Integer.parseInt(tfAssignmentID.getText());
+			} catch(Exception ex) {
+				message("Enter integer for Assignment ID", Color.RED);
+				return;
+			}
+			
+			String name = tfAssignmentName.getText();
+			
+			if(name.equals("")) {
+				message("Enter Assignment Name", Color.RED);
+				return;
+			}
+			
+			int points = -1;
+			try {
+				points = Integer.parseInt(tfAssignmentPoints.getText());
+			} catch (Exception ex) {
+				message("Enter positive integer for Assignment Points", Color.RED);
+				return;
+			}
+			
+			if(points < 0) {
+				message("Enter positive integer for Assignment Points", Color.RED);
+				return;
+			}
+			
+			String date = tfDueDate.getText();
+			Date due;
+			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			
+			try {
+				due = df.parse(date);
+			} catch (Exception ex) {
+				message("Incorrect Date Format", Color.RED);
+				return;
+			}
+			
+			Assignment assignment = new Assignment(id, due, points, name, type);
+			if(course.getAssignments().contains(assignment)) {
+				message("Course " + course + " already contains an Assignment with ID " + id, Color.RED);
+				return;
+			}
+			
+			course.addAssignment(assignment);
+			
+			message("Successfully added Assignment " + name + " to Course " + course, Color.GREEN);
+			
+		});
+		
 		
 		return addAssignment;
 	}
@@ -451,98 +516,9 @@ public class FinalProject extends Application {
 	}
 
 	public static void main(String[] args) {
+		courses.add(new Course("Test", .2, .3, .5));
 		Application.launch(args);
 	}
 
 }
 
-class CoursePane extends BorderPane {
-	String title;
-	ArrayList<Course> courses;
-	HBox courseButtons;
-	FlowPane courseLinks;
-	TextField addCourseTF;
-	TextField removeCourseTF;
-
-	CoursePane() {
-		title = "Courses";
-		courses = new ArrayList<Course>();
-
-		courseButtons = new HBox(10);
-		courseButtons.setAlignment(Pos.CENTER);
-
-		Text addCourseText = new Text("Add Course: ");
-		addCourseTF = new TextField("Course ID");
-		addCourseTF.setOnAction(e -> addCourse());
-
-		Text removeCourseText = new Text("Remove Course: ");
-		removeCourseTF = new TextField("Course ID");
-		removeCourseTF.setOnAction(e -> removeCourse());
-
-		courseButtons.getChildren().addAll(addCourseText, addCourseTF, removeCourseText, removeCourseTF);
-
-		courseLinks = new FlowPane();
-		courseLinks.setPadding(new Insets(10, 10, 10, 10));
-		courseLinks.setHgap(50);
-
-		courseLinks.getChildren().add(new Text("No Courses"));
-
-		setCenter(courseLinks);
-		setBottom(courseButtons);
-	}
-
-	void addCourse() {
-		String courseID = addCourseTF.getText();
-		addCourseTF.setText("");
-
-		if (courseID.length() < 3) {
-			error("Course ID must be at least 3 characters");
-			return;
-		}
-
-		System.out.println(courses.size());
-		if (courses.size() == 0) {
-			courseLinks.getChildren().clear();
-		}
-		Course newCourse = new Course(courseID);
-		Button newCourseBT = new Button(courseID);
-
-		if (courses.contains(newCourse)) {
-			error(courseID + " is already a course");
-			return;
-		}
-
-		courses.add(newCourse);
-		courseLinks.getChildren().add(newCourseBT);
-
-	}
-
-	void removeCourse() {
-		String courseID = removeCourseTF.getText();
-		removeCourseTF.setText("");
-
-		Course newCourse = new Course(courseID);
-
-		if (!courses.contains(newCourse)) {
-			error("Course ID does not match");
-			return;
-		}
-
-		for (int i = 0; i < courses.size(); i++) {
-			Button currentButton = (Button) courseLinks.getChildren().get(i);
-			if (currentButton.getText().equals(courseID)) {
-				courseLinks.getChildren().remove(i);
-				courses.remove(newCourse);
-			}
-		}
-
-		if (courses.size() == 0) {
-			courseLinks.getChildren().add(new Text("No Courses"));
-		}
-
-	}
-
-	void error(String error) {
-		System.out.println(error);
-	}
-}
