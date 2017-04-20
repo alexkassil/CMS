@@ -80,7 +80,7 @@ public class FinalProject extends Application {
 		primaryStage.setOnCloseRequest(e -> {
 			primaryStage.close();
 			for(Course c : courses) {
-				System.out.println(c);
+				System.out.println(c.courseInfo());
 				System.out.println(c.weights());
 			}
 		});
@@ -178,40 +178,91 @@ public class FinalProject extends Application {
 
 		// GUI
 		Text courseID = new Text("Course ID: ");
-		TextField tfCourseID = new TextField();
+		ComboBox<Course> cbCourses = coursesComboBox();
 
 		updateCourse.add(courseID, 0, 0);
-		updateCourse.add(tfCourseID, 1, 0);
+		updateCourse.add(cbCourses, 1, 0);
 
 		Text newCourseID = new Text("New Course ID: ");
-		TextField newTfCourseID = new TextField();
+		TextField tfNewCourseID = new TextField();
 
 		updateCourse.add(newCourseID, 0, 1);
-		updateCourse.add(newTfCourseID, 1, 1);
+		updateCourse.add(tfNewCourseID, 1, 1);
 
 		Text newHwWeight = new Text("New HW Weight: ");
-		TextField newTfHwWeight = new TextField();
+		TextField tfNewHwWeight = new TextField();
 
 		updateCourse.add(newHwWeight, 0, 2);
-		updateCourse.add(newTfHwWeight, 1, 2);
+		updateCourse.add(tfNewHwWeight, 1, 2);
 
 		Text newQuizWeight = new Text("New Quiz Weight: ");
-		TextField newTfQuizWeight = new TextField();
+		TextField tfNewQuizWeight = new TextField();
 
 		updateCourse.add(newQuizWeight, 0, 3);
-		updateCourse.add(newTfQuizWeight, 1, 3);
+		updateCourse.add(tfNewQuizWeight, 1, 3);
 
 		Text newTestWeight = new Text("New Test Weight: ");
-		TextField newTfTestWeight = new TextField();
+		TextField tfNewTestWeight = new TextField();
 
 		updateCourse.add(newTestWeight, 0, 4);
-		updateCourse.add(newTfTestWeight, 1, 4);
+		updateCourse.add(tfNewTestWeight, 1, 4);
 
 		Button btUpdateCourse = new Button("Update Course");
 
 		updateCourse.add(btUpdateCourse, 1, 5);
 
 		// Logic
+		
+		btUpdateCourse.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			String courseName = tfNewCourseID.getText();
+			double hw = 0;
+			double quiz = 0;
+			double test = 0;
+			double hwPercent = 0;
+			double quizPercent = 0;
+			double testPercent = 0;
+			
+			if(courseName.length() < 3) {
+				message("Course ID must be at least 3 characters", Color.RED);
+				return;
+			}
+			
+			for(Course c : courses) {
+				if(c.getCourseID().equals(courseName)) {
+					message("Other course already has Course ID " + courseName, Color.RED);
+					return;
+				}
+			}
+			
+			try {
+				hw = Double.parseDouble(tfNewHwWeight.getText());
+				quiz = Double.parseDouble(tfNewQuizWeight.getText());
+				test = Double.parseDouble(tfNewTestWeight.getText());
+			} catch (Exception ex) {
+				message("HW Weight, Quiz Weight, and Test Weight must all be numbers", Color.RED);
+				return;
+			}
+						
+			double total = hw + quiz + test;
+			hwPercent = hw / total;
+			quizPercent = quiz / total;
+			testPercent = test / total;
+			
+			course.setCourseID(courseName);
+			course.setHomeworkWeight(hwPercent);
+			course.setQuizWeight(quizPercent);
+			course.setTestWeight(testPercent);
+			
+			message("Successfully updated Course", Color.GREEN);
+			
+			
+		});
 
 		return updateCourse;
 	}
@@ -224,10 +275,10 @@ public class FinalProject extends Application {
 
 		// GUI
 		Text courseID = new Text("Course ID: ");
-		TextField tfCourseID = new TextField();
+		ComboBox<Course> cbCourses = coursesComboBox();
 
 		addStudent.add(courseID, 0, 0);
-		addStudent.add(tfCourseID, 1, 0);
+		addStudent.add(cbCourses, 1, 0);
 
 		Text studentID = new Text("Student ID: ");
 		TextField tfStudentID = new TextField();
@@ -246,7 +297,39 @@ public class FinalProject extends Application {
 		addStudent.add(btAddStudentRecord, 1, 3);
 
 		// Logic
-
+		btAddStudentRecord.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			int id = -1;
+			try {
+				id = Integer.parseInt(tfStudentID.getText());
+			} catch(Exception ex) {
+				message("Enter integer for Student ID", Color.RED);
+				return;
+			}
+			String name = tfStudentName.getText();
+			
+			if(name.equals("")) {
+				message("Enter Student Name", Color.RED);
+				return;
+			}
+			
+			StudentRecord record = new StudentRecord(name, id);
+			if(course.getRecords().contains(record)) {
+				message("Course " + course + " already contains student with id " + id, Color.RED);
+				return;
+			}
+			
+			course.addRecord(record);
+			
+			message("Sucessfully added Student Record to Course " + course, Color.GREEN);
+			
+		});
+		
 		return addStudent;
 	}
 	
@@ -267,7 +350,7 @@ public class FinalProject extends Application {
 		Text assignmentType = new Text("Assignment Type: ");
 		ComboBox cbAssignmentType = new ComboBox();
 		
-		cbAssignmentType.setMinWidth(200);
+		cbAssignmentType.setMinWidth(170);
 		cbAssignmentType.getItems().addAll("Homework", "Quiz", "Test");
 		cbAssignmentType.setValue("Homework");
 		
@@ -348,6 +431,14 @@ public class FinalProject extends Application {
 		// Logic
 		
 		return gradeAssignment;
+	}
+	
+	public ComboBox<Course> coursesComboBox() {
+		ComboBox<Course> cbCourses = new ComboBox<>();
+		cbCourses.setPrefWidth(170);
+		cbCourses.getItems().addAll(courses);
+		
+		return cbCourses;
 	}
 	
 	public void message(String message, Color color) {
