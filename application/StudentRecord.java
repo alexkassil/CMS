@@ -53,6 +53,15 @@ public class StudentRecord {
 		return "Name: " + name + " ID: " + id + " " + assignments.size() + " assignment(s)";
 	}
 	
+	@Override
+	public boolean equals(Object otherRecord) {
+		if(!(otherRecord instanceof StudentRecord)) {
+			return false;
+		}
+		
+		return ((StudentRecord)otherRecord).getID() == (this.getID());
+	}
+	
 	public void printAssignments() {
 		for(Assignment a : assignments) {
 			System.out.println(a);
