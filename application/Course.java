@@ -10,13 +10,23 @@ public class Course {
 	private double testWeight = 0;
 
 	public Course(String courseID, List<StudentRecord> records) {
-		this.courseID = courseID;
-		this.records = records;
-		assignments = new ArrayList<Assignment>();
+		this(courseID, records, 0, 0, 0);
 	}
 
 	public Course(String courseID) {
 		this(courseID, new ArrayList<StudentRecord>());
+	}
+	
+	public Course(String courseID, List<StudentRecord> records, double hwWeight, double quizWeight, double testWeight) {
+		this.courseID = courseID;
+		this.records = records;
+		this.homeworkWeight = hwWeight;
+		this.quizWeight = quizWeight;
+		this.testWeight = testWeight;
+	}
+	
+	public Course(String courseID, double hwWeight, double quizWeight, double testWeight) {
+		this(courseID, new ArrayList<StudentRecord>(), hwWeight, quizWeight, testWeight);
 	}
 
 	
