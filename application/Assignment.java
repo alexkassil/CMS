@@ -81,6 +81,10 @@ public class Assignment implements Cloneable {
 	
 	@Override
 	public String toString() {
+		return name + " " + points + " point(s)";
+	}
+	
+	public String assignmentInfo() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		String date = dateFormat.format(dueDate);
 		return id + " Assignment " + name + " is " + type + ". It is due " + date +
@@ -103,6 +107,7 @@ public class Assignment implements Cloneable {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 		Assignment assignmentClone = (Assignment)super.clone();
+		assignmentClone.id = this.id;
 		assignmentClone.setDueDate((Date)(this.getDueDate().clone()));
 		return assignmentClone;
 	}

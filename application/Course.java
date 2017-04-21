@@ -3,13 +3,13 @@ import java.util.*;
 
 public class Course {
 	private String courseID;
-	private List<StudentRecord> records;
-	private List<Assignment> assignments;
+	private ArrayList<StudentRecord> records;
+	private ArrayList<Assignment> assignments;
 	private double homeworkWeight = 0;
 	private double quizWeight = 0;
 	private double testWeight = 0;
 
-	public Course(String courseID, List<StudentRecord> records) {
+	public Course(String courseID,ArrayList<StudentRecord> records) {
 		this(courseID, records, 0, 0, 0);
 	}
 
@@ -17,7 +17,7 @@ public class Course {
 		this(courseID, new ArrayList<StudentRecord>());
 	}
 	
-	public Course(String courseID, List<StudentRecord> records, double hwWeight, double quizWeight, double testWeight) {
+	public Course(String courseID, ArrayList<StudentRecord> records, double hwWeight, double quizWeight, double testWeight) {
 		this.courseID = courseID;
 		this.records = records;
 		this.homeworkWeight = hwWeight;
@@ -73,7 +73,7 @@ public class Course {
 
 	private double getTotalScores(StudentRecord record, assignmentType type) {
 
-		List<Assignment> a = record.getAssignments();
+		ArrayList<Assignment> a = record.getAssignments();
 		double scores = 0;
 
 		for (Assignment assignment : a) {
@@ -91,7 +91,7 @@ public class Course {
 		}
 	}
 
-	public void assign(List<Assignment> assignments) throws CloneNotSupportedException {
+	public void assign(ArrayList<Assignment> assignments) throws CloneNotSupportedException {
 		for(Assignment assignment : assignments) {
 			assign(assignment);
 		}
@@ -105,7 +105,7 @@ public class Course {
 		assignments.add(assignment);
 	}
 
-	public void addAssignments(List<Assignment> assignments) {
+	public void addAssignments(ArrayList<Assignment> assignments) {
 		this.assignments.addAll(assignments);
 	}
 
@@ -117,11 +117,11 @@ public class Course {
 		return courseID;
 	}
 
-	public List<StudentRecord> getRecords() {
+	public ArrayList<StudentRecord> getRecords() {
 		return records;
 	}
 
-	public List<Assignment> getAssignments() {
+	public ArrayList<Assignment> getAssignments() {
 		return assignments;
 	}
 
@@ -141,11 +141,11 @@ public class Course {
 		this.courseID = courseID;
 	}
 
-	public void setRecords(List<StudentRecord> records) {
+	public void setRecords(ArrayList<StudentRecord> records) {
 		this.records = records;
 	}
 
-	public void setAssignments(List<Assignment> assignments) {
+	public void setAssignments(ArrayList<Assignment> assignments) {
 		this.assignments = assignments;
 	}
 

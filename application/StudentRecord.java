@@ -4,7 +4,7 @@ import java.util.*;
 public class StudentRecord {
 	private String name;
 	private int id; // Unique
-	private List<Assignment> assignments;
+	private ArrayList<Assignment> assignments;
 	
 	public StudentRecord(String name, int id) {
 		this.name = name;
@@ -13,11 +13,21 @@ public class StudentRecord {
 	}
 	
 	public void addAssignment(Assignment assignment) {
-		assignments.add(assignment);
+		if(!assignments.contains(assignment)) {
+			assignments.add(assignment);
+		}
 	}
 	
-	public void addAssignments(List<Assignment> assignments) {
-		this.assignments.addAll(assignments);
+	public void printIDs() {
+		for(Assignment a : assignments) {
+			System.out.println(a.getName() + " " + a.getID());
+		}
+	}
+	
+	public void addAssignments(ArrayList<Assignment> assignments) {
+		for(Assignment assignment : assignments) {
+			addAssignment(assignment);
+		}
 	}
 	
 	public void removeAssignment(Assignment assignment) {
@@ -32,7 +42,7 @@ public class StudentRecord {
 		return id;
 	}
 	
-	public List<Assignment> getAssignments() {
+	public ArrayList<Assignment> getAssignments() {
 		return assignments;
 	}
 	
@@ -44,12 +54,16 @@ public class StudentRecord {
 		this.id = id;
 	}
 	
-	public void setAssignments(List<Assignment> assignments) {
+	public void setAssignments(ArrayList<Assignment> assignments) {
 		this.assignments = assignments;
 	}
 	
 	@Override
 	public String toString() {
+		return id + " " + name;
+	}
+	
+	public String studentRecordInfo() {
 		return "Name: " + name + " ID: " + id + " " + assignments.size() + " assignment(s)";
 	}
 	

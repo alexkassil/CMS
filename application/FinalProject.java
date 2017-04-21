@@ -65,7 +65,7 @@ public class FinalProject extends Application {
 
 		pickPane.getChildren().addAll(select, cb);
 
-		// message formatting
+		// Message formatting
 		HBox hbMessage = new HBox(10);
 		hbMessage.setAlignment(Pos.CENTER);
 		hbMessage.getChildren().add(message);
@@ -328,8 +328,16 @@ public class FinalProject extends Application {
 			
 			course.addRecord(record);
 			
+			
+			
 			message("Sucessfully added Student Record to Course " + course, Color.GREEN);
 			
+			try {
+				course.assignAll();
+			} catch (CloneNotSupportedException e1) {
+				message("Clone Error", Color.PURPLE);
+				return;
+			}
 		});
 		
 		return addStudent;
@@ -445,7 +453,15 @@ public class FinalProject extends Application {
 			
 			course.addAssignment(assignment);
 			
+			
 			message("Successfully added Assignment " + name + " to Course " + course, Color.GREEN);
+			
+			try {
+				course.assignAll();
+			} catch (CloneNotSupportedException e1) {
+				message("Clone Error", Color.PURPLE);
+				return;
+			}
 			
 		});
 		
@@ -461,22 +477,31 @@ public class FinalProject extends Application {
 		
 		// GUI
 		Text courseID = new Text("Course ID: ");
-		TextField tfCourseID = new TextField();
+		ComboBox<Course> cbCourses = coursesComboBox();
+		cbCourses.setPrefWidth(170);
 		
 		gradeAssignment.add(courseID, 0, 0);
-		gradeAssignment.add(tfCourseID, 1, 0);
+		gradeAssignment.add(cbCourses, 1, 0);
 		
 		Text assignmentID = new Text("Assignment ID: ");
-		TextField tfAssignmentID = new TextField();
+		ComboBox<Assignment> cbAssignments = new ComboBox<>();
+		cbAssignments.setPrefWidth(170);
 		
-		gradeAssignment.add(assignmentID, 0, 1);
-		gradeAssignment.add(tfAssignmentID, 1, 1);
+		gradeAssignment.add(assignmentID, 0, 2);
+		gradeAssignment.add(cbAssignments, 1, 2);
+		
+		Text studentRecord = new Text("Student Record: ");
+		ComboBox<StudentRecord> cbStudentRecords = new ComboBox<>();
+		cbStudentRecords.setPrefWidth(170);
+		
+		gradeAssignment.add(studentRecord, 0, 1);
+		gradeAssignment.add(cbStudentRecords, 1, 1);
 		
 		Text grade = new Text("Grade: ");
 		TextField tfGrade = new TextField();
 		
-		gradeAssignment.add(grade, 0, 2);
-		gradeAssignment.add(tfGrade, 1, 2);
+		gradeAssignment.add(grade, 0, 3);
+		gradeAssignment.add(tfGrade, 1, 3);
 		
 		RadioButton rbRaw = new RadioButton("Raw Grade");
 		RadioButton rbPercentage = new RadioButton("Percentange");
@@ -486,14 +511,65 @@ public class FinalProject extends Application {
 		rbPercentage.setToggleGroup(tgGrade);
 		rbRaw.setSelected(true);
 		
-		gradeAssignment.add(rbRaw, 0, 3);
-		gradeAssignment.add(rbPercentage, 1, 3);
+		gradeAssignment.add(rbRaw, 0, 4);
+		gradeAssignment.add(rbPercentage, 1, 4);
 		
 		Button btGradeAssignment = new Button("Grade Assignment");
 		
-		gradeAssignment.add(btGradeAssignment, 1, 4);
+		gradeAssignment.add(btGradeAssignment, 1, 5);
 		
 		// Logic
+		
+		cbCourses.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			ArrayList<StudentRecord> records = course.getRecords();
+			if(records.size() == 0) {
+				message("Error, this course has no Student Records", Color.RED);
+				return;
+			}
+			
+			cbStudentRecords.getItems().clear();
+			cbStudentRecords.getItems().addAll(records);
+			
+			message("Course succcessfully chosen, now choose a Student Record", Color.GREEN);
+			
+		});
+		
+		cbStudentRecords.setOnAction(e -> {
+			StudentRecord record = cbStudentRecords.getValue();
+			if(record == null) {
+				message("Error, select a Student Record", Color.RED);
+				return;
+			}
+			
+			ArrayList<Assignment> assignments = record.getAssignments();
+			
+			if(assignments.size() == 0) {
+				message("Error, this Course has no assignments", Color.RED);
+				return;
+			}
+			
+			cbAssignments.getItems().clear();
+			cbAssignments.getItems().addAll(assignments);
+			
+			message("Student Record successfully chosen, now choose an assignment to grade", Color.GREEN);
+			
+		});
+		
+		btGradeAssignment.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			
+		});
 		
 		return gradeAssignment;
 	}
