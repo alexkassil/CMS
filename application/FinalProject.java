@@ -28,7 +28,7 @@ import javafx.scene.paint.Color;
 
 public class FinalProject extends Application {
 	static ArrayList<Course> courses = new ArrayList<Course>();
-	Label message = new Label("test");
+	Label message = new Label("");
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -70,20 +70,31 @@ public class FinalProject extends Application {
 		hbMessage.setAlignment(Pos.CENTER);
 		hbMessage.getChildren().add(message);
 		message.setPadding(new Insets(5, 10, 10, 5));
-		message.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, FontPosture.ITALIC, 16));
+		message.setId("the-label");
+		message.setWrapText(true);
+
 
 		pane.setTop(pickPane);
 		pane.setBottom(hbMessage);
-
+		pane.setId("text");
+		
 		Scene scene = new Scene(pane, 750, 750);
 		primaryStage.setScene(scene);
+		scene.getStylesheets().add(FinalProject.class.getResource("FinalProject.css").toExternalForm());
 		primaryStage.setTitle("Kassil's Course Management Service");
 		primaryStage.show();
+		message("Welcome to the Course Management Serivice!", Color.BLUE);
 		primaryStage.setOnCloseRequest(e -> {
 			primaryStage.close();
 			for(Course c : courses) {
 				System.out.println(c.courseInfo());
 				System.out.println(c.weights());
+				System.out.println("---------------");
+				for(StudentRecord r : c.getRecords()) {
+					System.out.println(r.studentRecordInfo());
+					r.printAssignments();
+					System.out.println("----------");
+				}
 			}
 		});
 	}
@@ -97,7 +108,7 @@ public class FinalProject extends Application {
 		// GUI
 		Text courseID = new Text("Course ID: ");
 		TextField tfCourseID = new TextField();
-
+		
 		createCourse.add(courseID, 0, 0);
 		createCourse.add(tfCourseID, 1, 0);
 
@@ -568,6 +579,37 @@ public class FinalProject extends Application {
 				return;
 			}
 			
+			StudentRecord record = cbStudentRecords.getValue();
+			if(record == null) {
+				message("Error, select a Student Record", Color.RED);
+				return;
+			}
+			
+			Assignment assignment = cbAssignments.getValue();
+			if(assignment == null) {
+				message("Error, select an Assignment", Color.RED);
+				return;
+			}
+			
+			double givenGrade = 0;
+			
+			try {
+				givenGrade = Double.parseDouble(tfGrade.getText());
+			} catch (Exception ex) {
+				message("Error, enter correct a double for grade", Color.RED);
+				return;
+			}
+			
+			if(rbRaw.isSelected()) {
+				course.gradeAssignment(record, assignment.getID(), givenGrade);
+			} else if (rbPercentage.isSelected()) {
+				course.gradeAssignment(record, assignment.getID(), (givenGrade/100.0) * assignment.getPoints());
+			}
+			
+			message("Assignment Successfully graded!", Color.GREEN);
+			
+			
+			
 			
 		});
 		
@@ -592,7 +634,6 @@ public class FinalProject extends Application {
 	}
 
 	public static void main(String[] args) {
-		courses.add(new Course("Test", .2, .3, .5));
 		Application.launch(args);
 	}
 

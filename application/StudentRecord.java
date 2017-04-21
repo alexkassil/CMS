@@ -79,6 +79,7 @@ public class StudentRecord {
 	public void printAssignments() {
 		for(Assignment a : assignments) {
 			System.out.println(a);
+			System.out.println(a.getGrade());
 		}
 	}
 	
