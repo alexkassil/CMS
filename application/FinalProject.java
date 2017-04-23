@@ -45,7 +45,8 @@ public class FinalProject extends Application {
 		cb.setPrefWidth(600);
 
 		// ComboBox Options
-		cb.getItems().addAll("Create Course", "Update Course", "Add Student Record", "Add Assignment", "Grade Assignment");
+		cb.getItems().addAll("Create Course", "Update Course", "Add Student Record", "Add Assignment", 
+				"Grade Assignment", "View Grades");
 
 		// Selecting options
 		cb.setOnAction(e -> {
@@ -59,6 +60,8 @@ public class FinalProject extends Application {
 				pane.setCenter(addAssignment());
 			} else if (cb.getValue().equals("Grade Assignment")) {
 				pane.setCenter(gradeAssignment());
+			} else if (cb.getValue().equals("View Grades")) {
+				pane.setCenter(viewGrades());
 			}
 			clear();
 		});
@@ -93,6 +96,7 @@ public class FinalProject extends Application {
 				for(StudentRecord r : c.getRecords()) {
 					System.out.println(r.studentRecordInfo());
 					r.printAssignments();
+					System.out.println(c.getGrade(r) * 100);
 					System.out.println("----------");
 				}
 			}
@@ -614,6 +618,82 @@ public class FinalProject extends Application {
 		});
 		
 		return gradeAssignment;
+	}
+	
+	public GridPane viewGrades() {
+		GridPane viewGrade = new GridPane();
+		viewGrade.setAlignment(Pos.CENTER);
+		viewGrade.setHgap(20);
+		viewGrade.setVgap(20);
+		
+		// GUI
+		Text courseID = new Text("Course ID: ");
+		ComboBox<Course> cbCourses = coursesComboBox();
+		cbCourses.setPrefWidth(170);
+		
+		viewGrade.add(courseID, 0, 0);
+		viewGrade.add(cbCourses, 1, 0);
+		
+		Text studentRecord = new Text("Student Record: ");
+		ComboBox<StudentRecord> cbStudentRecords = new ComboBox<>();
+		cbStudentRecords.setPrefWidth(170);
+		
+		viewGrade.add(studentRecord, 0, 1);
+		viewGrade.add(cbStudentRecords, 1, 1);
+		
+		Text gradeText = new Text("Grade (% Percent): ");
+		Text grade = new Text();
+		
+		viewGrade.add(gradeText, 0, 2);
+		viewGrade.add(grade, 1, 2);
+		
+		// Logic
+		
+		cbCourses.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			ArrayList<StudentRecord> records = course.getRecords();
+			if(records.size() == 0) {
+				message("Error, this course has no Student Records", Color.RED);
+				return;
+			}
+			
+			cbStudentRecords.getItems().clear();
+			cbStudentRecords.getItems().addAll(records);
+			
+			message("Course succcessfully chosen, now choose a Student Record", Color.GREEN);
+			
+		});
+		
+		cbStudentRecords.setOnAction(e -> {
+			StudentRecord record = cbStudentRecords.getValue();
+			if(record == null) {
+				message("Error, select a Student Record", Color.RED);
+				return;
+			}
+			
+			Course course = cbCourses.getValue();
+			if(course == null) {
+				message("Error, select a course", Color.RED);
+				return;
+			}
+			
+			double rawGrade = course.getGrade(record);
+			
+			String formattedGrade = String.format("%.2f", rawGrade * 100);
+			
+			grade.setText(formattedGrade);
+			
+			
+			message("This is " + record.getName() + "'s grade in the class " + course.getCourseID(), Color.GREEN);
+			
+		});
+		
+		return viewGrade;
 	}
 	
 	public ComboBox<Course> coursesComboBox() {
