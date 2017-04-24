@@ -77,7 +77,7 @@ public class Course {
 		double scores = 0;
 
 		for (Assignment assignment : a) {
-			if (assignment.getAssignmentType() == type) {
+			if (assignment.getAssignmentType() == type && assignment.getScore() > 0) {
 				scores += assignment.getScore();
 			}
 		}

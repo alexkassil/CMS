@@ -610,7 +610,7 @@ public class FinalProject extends Application {
 				course.gradeAssignment(record, assignment.getID(), (givenGrade/100.0) * assignment.getPoints());
 			}
 			
-			message("Assignment Successfully graded!", Color.GREEN);
+			message("Assignment " + assignment.getName() + " Successfully graded!", Color.GREEN);
 			
 			
 			
