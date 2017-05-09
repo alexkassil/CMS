@@ -128,6 +128,7 @@ public class FinalProject extends Application {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		courses.clear();
 		getCoursesDB();
 		getStudentRecordsDB();
 		getAssignmentsDB();
@@ -138,7 +139,6 @@ public class FinalProject extends Application {
 		try {
 			String getCourses = "SELECT * FROM Courses";
 			ResultSet rset = stmt.executeQuery(getCourses);
-			System.out.println("Course query successful");
 			
 			while(rset.next()) {
 				String courseID = rset.getString(1);
@@ -146,7 +146,7 @@ public class FinalProject extends Application {
 				double quizWeight = rset.getDouble(3);
 				double testWeight = rset.getDouble(4);
 				
-				System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
+				//System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
 				Course course = new Course(courseID, hwWeight, quizWeight, testWeight);
 				courses.add(course);
 			}
@@ -162,14 +162,13 @@ public class FinalProject extends Application {
 		try {
 			String getStudentRecords = "SELECT * FROM StudentRecords";
 			ResultSet rset = stmt.executeQuery(getStudentRecords);
-			System.out.println("Student Record query successful");
 			
 			while(rset.next()) {
 				int studentRecordID = rset.getInt(1);
 				String courseID = rset.getString(2);
 				String studentName = rset.getString(3);
 				
-				System.out.println(studentRecordID + " " + courseID + " " + studentName);
+				//System.out.println(studentRecordID + " " + courseID + " " + studentName);
 				Course currentCourse = getCourse(courseID);
 
 				if(currentCourse == null)
@@ -200,8 +199,8 @@ public class FinalProject extends Application {
 				String name = rset.getString(5);
 				String assignmentTypeString = rset.getString(6);
 				
-				System.out.printf("%d %s %s %d %s %s\n", id, courseID, dueDate, points,
-						name, assignmentTypeString);
+				//System.out.printf("%d %s %s %d %s %s\n", id, courseID, dueDate, points,
+				//		name, assignmentTypeString);
 				
 				Course currentCourse = getCourse(courseID);
 				
@@ -258,7 +257,7 @@ public class FinalProject extends Application {
 			int id = rset.getInt(3);
 			double grade = rset.getDouble(4);
 			
-			System.out.printf("%s %d %d %.4f\n", courseID, studentRecordID, id, grade);
+			//System.out.printf("%s %d %d %.4f\n", courseID, studentRecordID, id, grade);
 			
 			Course course = getCourse(courseID);
 			
