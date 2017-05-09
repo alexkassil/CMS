@@ -40,6 +40,15 @@ public class Course {
 			}
 		}
 	}
+	
+	public void gradeAssignmentPercent(StudentRecord record, int assignmentID, double percent) {
+		List<Assignment> a = record.getAssignments();
+		for(Assignment assignment: a) {
+			if(assignment.getID() == assignmentID) {
+				assignment.setScore(percent * assignment.getPoints());
+			}
+		}
+	}
 
 	public double getGrade(StudentRecord record) {
 		return getHomeworkGradeTotal(record) * homeworkWeight + getQuizGradeTotal(record) * quizWeight
