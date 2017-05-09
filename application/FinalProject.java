@@ -248,7 +248,36 @@ public class FinalProject extends Application {
 	}
 	
 	public void getGradesDB() {
+		try {
+		String getGrades = "SELECT * FROM Grades";
+		ResultSet rset = stmt.executeQuery(getGrades);
 		
+		while(rset.next()) {
+			String courseID = rset.getString(1);
+			int studentRecordID = rset.getInt(2);
+			int id = rset.getInt(3);
+			double grade = rset.getDouble(4);
+			
+			System.out.printf("%s %d %d %.4f\n", courseID, studentRecordID, id, grade);
+			
+			Course course = getCourse(courseID);
+			
+			if(course == null)
+				continue;
+			
+			StudentRecord record = getRecord(course, studentRecordID);
+			
+			if(record == null)
+				continue;
+			
+			course.gradeAssignmentPercent(record, id, grade);
+		}
+		
+		
+		
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public GridPane createCourse() {
@@ -865,6 +894,15 @@ public class FinalProject extends Application {
 		for(Course c: courses) {
 			if(c.getCourseID().equals(courseID)) 
 				return c;
+		}
+		return null;
+	}
+	
+	public StudentRecord getRecord(Course course, int id) {
+		for(StudentRecord r : course.getRecords()) {
+			if(r.getID() == id) {
+				return r;
+			}
 		}
 		return null;
 	}
