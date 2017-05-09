@@ -1,6 +1,11 @@
 package project;
 
 import java.text.SimpleDateFormat;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.util.*;
 
@@ -29,6 +34,7 @@ import javafx.scene.paint.Color;
 public class FinalProject extends Application {
 	static ArrayList<Course> courses = new ArrayList<Course>();
 	Label message = new Label("");
+	private Statement stmt;
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -81,6 +87,11 @@ public class FinalProject extends Application {
 		pane.setBottom(hbMessage);
 		pane.setId("text");
 		
+		// SQL Connection
+		initializeDB();
+		
+		
+		// Setting up GUI
 		Scene scene = new Scene(pane, 750, 750);
 		primaryStage.setScene(scene);
 		scene.getStylesheets().add(FinalProject.class.getResource("FinalProject.css").toExternalForm());
@@ -101,6 +112,58 @@ public class FinalProject extends Application {
 				}
 			}
 		});
+	}
+	
+	public void initializeDB() {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			System.out.println("Driver loaded");
+			
+			Connection connection = DriverManager.getConnection
+					("jdbc:mysql://localhost/finalproject", "root", "qwerty");
+			System.out.println("Database connected");
+			
+			stmt = connection.createStatement();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		getCoursesDB();
+		getStudentRecords();
+	}
+	
+	public void getCoursesDB() {
+		try {
+			String getCourses = "SELECT * FROM Courses";
+			ResultSet rset = stmt.executeQuery(getCourses);
+			System.out.println("Course query successful");
+			
+			if(rset.next()) {
+				String courseID = rset.getString(1);
+				double hwWeight = rset.getDouble(2);
+				double quizWeight = rset.getDouble(3);
+				double testWeight = rset.getDouble(4);
+				
+				System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
+				Course course = new Course(courseID, hwWeight, quizWeight, testWeight);
+				courses.add(course);
+			}
+			
+			
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void getStudentRecords() {
+		try {
+			String getStudentRecords = "SELECT * FROM StudentRecords";
+			ResultSet rset = stmt.executeQuery(getStudentRecords);
+			System.out.println("Student Record query successful");
+			
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	public GridPane createCourse() {
@@ -711,6 +774,14 @@ public class FinalProject extends Application {
 	
 	public void clear() {
 		this.message.setText("");
+	}
+	
+	public Course getCourse(String courseID) {
+		for(Course c: courses) {
+			if(c.getCourseID().equals(courseID)) 
+				return c;
+		}
+		return null;
 	}
 
 	public static void main(String[] args) {
