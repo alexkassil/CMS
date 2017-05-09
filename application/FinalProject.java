@@ -129,6 +129,7 @@ public class FinalProject extends Application {
 		}
 		getCoursesDB();
 		getStudentRecords();
+		getAssignments();
 	}
 	
 	public void getCoursesDB() {
@@ -137,7 +138,7 @@ public class FinalProject extends Application {
 			ResultSet rset = stmt.executeQuery(getCourses);
 			System.out.println("Course query successful");
 			
-			if(rset.next()) {
+			while(rset.next()) {
 				String courseID = rset.getString(1);
 				double hwWeight = rset.getDouble(2);
 				double quizWeight = rset.getDouble(3);
@@ -160,6 +161,36 @@ public class FinalProject extends Application {
 			String getStudentRecords = "SELECT * FROM StudentRecords";
 			ResultSet rset = stmt.executeQuery(getStudentRecords);
 			System.out.println("Student Record query successful");
+			
+			while(rset.next()) {
+				int studentRecordID = rset.getInt(1);
+				String courseID = rset.getString(2);
+				String studentName = rset.getString(3);
+				
+				System.out.println(studentRecordID + " " + courseID + " " + studentName);
+				Course currentCourse = getCourse(courseID);
+
+				if(currentCourse == null)
+					continue;
+				
+				StudentRecord currentRecord = new StudentRecord(studentName, studentRecordID);
+				
+				if(currentCourse.getRecords().contains(currentRecord))
+					continue;
+				
+				currentCourse.addRecord(currentRecord);
+			}
+		} catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	public void getAssignments() {
+		try {
+			String getAssignments = "SELECT * FROM Assignments";
+			ResultSet rset = stmt.executeQuery(getAssignments);
+			
+			//TODO
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
