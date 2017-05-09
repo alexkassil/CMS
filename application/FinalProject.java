@@ -131,6 +131,7 @@ public class FinalProject extends Application {
 		getCoursesDB();
 		getStudentRecordsDB();
 		getAssignmentsDB();
+		getGradesDB();
 	}
 	
 	public void getCoursesDB() {
@@ -243,6 +244,10 @@ public class FinalProject extends Application {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+	}
+	
+	public void getGradesDB() {
 		
 	}
 
