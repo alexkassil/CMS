@@ -32,14 +32,14 @@ create table StudentRecords (
 create table Grades (
        courseID varchar(50) not null,
        studentRecordID int not null,
-       if int not null,
+       id int not null,
        grade double(10, 5) not null);
 
 insert into Courses values('Math 54', .2, .3, .5);
 
-insert into StudentRecords(1, 'Math 54', 'Alex');
-insert into StudentRecords(2, 'Math 54', 'Charlie');
-insert into StudentRecords(3, 'Math 54', 'Sarah');
+insert into StudentRecords values(1, 'Math 54', 'Alex');
+insert into StudentRecords values(2, 'Math 54', 'Charlie');
+insert into StudentRecords values(3, 'Math 54', 'Sarah');
 
 insert into Assignments values(1, 'Math 54', now(), 20, 'Homework 1', 'HWRK');
 insert into Assignments values(2, 'Math 54', now(), 20, 'Homework 2', 'HWRK');
