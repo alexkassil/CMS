@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.*;
 
 import javafx.application.Application;
@@ -128,8 +129,8 @@ public class FinalProject extends Application {
 			ex.printStackTrace();
 		}
 		getCoursesDB();
-		getStudentRecords();
-		getAssignments();
+		getStudentRecordsDB();
+		getAssignmentsDB();
 	}
 	
 	public void getCoursesDB() {
@@ -156,7 +157,7 @@ public class FinalProject extends Application {
 		}
 	}
 	
-	public void getStudentRecords() {
+	public void getStudentRecordsDB() {
 		try {
 			String getStudentRecords = "SELECT * FROM StudentRecords";
 			ResultSet rset = stmt.executeQuery(getStudentRecords);
@@ -185,16 +186,64 @@ public class FinalProject extends Application {
 		}
 	}
 	
-	public void getAssignments() {
+	public void getAssignmentsDB() {
 		try {
 			String getAssignments = "SELECT * FROM Assignments";
 			ResultSet rset = stmt.executeQuery(getAssignments);
 			
-			//TODO
+			while(rset.next()) {
+				int id = rset.getInt(1);
+				String courseID = rset.getString(2);
+				String dueDate = rset.getString(3);
+				int points = rset.getInt(4);
+				String name = rset.getString(5);
+				String assignmentTypeString = rset.getString(6);
+				
+				System.out.printf("%d %s %s %d %s %s\n", id, courseID, dueDate, points,
+						name, assignmentTypeString);
+				
+				Course currentCourse = getCourse(courseID);
+				
+				if(currentCourse == null)
+					continue;
+				
+				
+				assignmentType type;
+				
+				if(assignmentTypeString.equals("HWRK"))
+					type = assignmentType.HOMEWORK;
+				else if(assignmentTypeString.equals("QUIZ"))
+					type = assignmentType.QUIZ;
+				else
+					type = assignmentType.TEST;
+				
+				
+				Date due;
+				DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+				
+				
+				due = df.parse(dueDate);
+				
+
+				Assignment currentAssignment = new Assignment(id, due, points, name, type);
+				
+				if(currentCourse.getAssignments().contains(currentAssignment))
+					continue;
+				
+				currentCourse.addAssignment(currentAssignment);
+				
+				currentCourse.assignAll();
+			}
+			
 			
 		} catch (SQLException ex) {
 			ex.printStackTrace();
+		} catch (CloneNotSupportedException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
 		}
+		
 	}
 
 	public GridPane createCourse() {
