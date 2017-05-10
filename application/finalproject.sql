@@ -37,16 +37,16 @@ create table Grades (
 
 insert into Courses values('Math 54', .2, .3, .5);
 
-insert into StudentRecords values(1, 'Math 54', 'Alex');
-insert into StudentRecords values(2, 'Math 54', 'Charlie');
-insert into StudentRecords values(3, 'Math 54', 'Sarah');
+insert into StudentRecords values(null, 'Math 54', 'Alex');
+insert into StudentRecords values(null, 'Math 54', 'Charlie');
+insert into StudentRecords values(null, 'Math 54', 'Sarah');
 
-insert into Assignments values(1, 'Math 54', now(), 20, 'Homework 1', 'HWRK');
-insert into Assignments values(2, 'Math 54', now(), 20, 'Homework 2', 'HWRK');
-insert into Assignments values(3, 'Math 54', now(), 20, 'Quiz 1', 'QUIZ');
-insert into Assignments values(4, 'Math 54', now(), 20, 'Quiz 2', 'QUIZ');
-insert into Assignments values(5, 'Math 54', now(), 20, 'Test 1', 'TEST');
-insert into Assignments values(6, 'Math 54', now(), 20, 'Test 2', 'TEST');
+insert into Assignments values(null, 'Math 54', now(), 20, 'Homework 1', 'HWRK');
+insert into Assignments values(null, 'Math 54', now(), 20, 'Homework 2', 'HWRK');
+insert into Assignments values(null, 'Math 54', now(), 20, 'Quiz 1', 'QUIZ');
+insert into Assignments values(null, 'Math 54', now(), 20, 'Quiz 2', 'QUIZ');
+insert into Assignments values(null, 'Math 54', now(), 20, 'Test 1', 'TEST');
+insert into Assignments values(null, 'Math 54', now(), 20, 'Test 2', 'TEST');
 
 insert into Grades values('Math 54', 1, 1, 1.5);
 insert into Grades values('Math 54', 1, 2, 1);
