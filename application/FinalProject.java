@@ -565,12 +565,6 @@ public class FinalProject extends Application {
 		addAssignment.add(assignmentTypeText, 0, 1);
 		addAssignment.add(cbAssignmentType, 1, 1);
 		
-		Text assignmentID = new Text("Assignment ID: ");
-		TextField tfAssignmentID = new TextField();
-		
-		addAssignment.add(assignmentID, 0, 2);
-		addAssignment.add(tfAssignmentID, 1, 2);
-		
 		Text assignmentName = new Text("Assignment Name: ");
 		TextField tfAssignmentName = new TextField();
 		
@@ -583,7 +577,7 @@ public class FinalProject extends Application {
 		addAssignment.add(assignmentPoints, 0, 4);
 		addAssignment.add(tfAssignmentPoints, 1, 4);
 		
-		Text dueDate = new Text("Due Date: (MM/dd/yyyy) ");
+		Text dueDate = new Text("Due Date: (MM-dd-yyyy) ");
 		TextField tfDueDate = new TextField();
 		
 		addAssignment.add(dueDate, 0, 5);
@@ -602,15 +596,13 @@ public class FinalProject extends Application {
 				return;
 			}
 			
+			String typeString;
 			assignmentType type = cbAssignmentType.getValue();
+			if(type.name().equals("HOMEWORK"))
+				typeString = "HWRK";
+			else
+				typeString = type.name();
 			
-			int id = -1;
-			try {
-				id = Integer.parseInt(tfAssignmentID.getText());
-			} catch(Exception ex) {
-				message("Enter integer for Assignment ID", Color.RED);
-				return;
-			}
 			
 			String name = tfAssignmentName.getText();
 			
@@ -634,7 +626,7 @@ public class FinalProject extends Application {
 			
 			String date = tfDueDate.getText();
 			Date due;
-			DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 			
 			try {
 				due = df.parse(date);
@@ -643,16 +635,32 @@ public class FinalProject extends Application {
 				return;
 			}
 			
-			Assignment assignment = new Assignment(id, due, points, name, type);
-			if(course.getAssignments().contains(assignment)) {
-				message("Course " + course + " already contains an Assignment with ID " + id, Color.RED);
-				return;
+			java.sql.Date sqlDate = new java.sql.Date(due.getTime());
+			
+			System.out.println(date + "\n" + due);
+			
+			
+			try {
+				String addAssignmentSQL = "INSERT INTO Assignments VALUES(null, '" +
+						course.getCourseID() + "', '" + sqlDate + "', " + points + ", '" +
+						name + "', '" + typeString + "')";
+				
+				System.out.println(addAssignmentSQL);
+				
+				int id = stmt.executeUpdate(addAssignmentSQL, Statement.RETURN_GENERATED_KEYS);
+				
+				Assignment assignment = new Assignment(id, due, points, name, type);
+				course.addAssignment(assignment);
+				message("Successfully added Assignment " + name + " to Course " + course, Color.GREEN);
+
+			} catch (Exception ex) {
+				ex.printStackTrace();
 			}
 			
-			course.addAssignment(assignment);
 			
 			
-			message("Successfully added Assignment " + name + " to Course " + course, Color.GREEN);
+			
+			
 			
 			try {
 				course.assignAll();
