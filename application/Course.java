@@ -96,7 +96,8 @@ public class Course {
 
 	public void assign(Assignment assignment) throws CloneNotSupportedException {
 		for (StudentRecord record : records) {
-			record.addAssignment((Assignment)(assignment.clone()));
+			if(!record.getAssignments().contains(assignment))
+				record.addAssignment((Assignment)(assignment.clone()));
 		}
 	}
 

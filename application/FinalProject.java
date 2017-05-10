@@ -146,7 +146,7 @@ public class FinalProject extends Application {
 				double quizWeight = rset.getDouble(3);
 				double testWeight = rset.getDouble(4);
 				
-				System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
+				//System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
 				Course course = new Course(courseID, hwWeight, quizWeight, testWeight);
 				courses.add(course);
 			}
@@ -512,11 +512,15 @@ public class FinalProject extends Application {
 			
 			String addRecord = "INSERT INTO StudentRecords VALUES(null, '" +
 					course.getCourseID() + "', '" + name + "')";
-			
-			System.out.println(addRecord);
-			
+						
 			try {
-				int id = stmt.executeUpdate(addRecord, Statement.RETURN_GENERATED_KEYS); 
+				stmt.executeUpdate(addRecord, Statement.RETURN_GENERATED_KEYS); 
+				
+				ResultSet rs = stmt.getGeneratedKeys();
+				int id = 0;
+				if(rs.next()) {
+					id = rs.getInt(1);
+				}
 				
 				StudentRecord record = new StudentRecord(name, id);
 				course.addRecord(record);
@@ -600,8 +604,10 @@ public class FinalProject extends Application {
 			assignmentType type = cbAssignmentType.getValue();
 			if(type.name().equals("HOMEWORK"))
 				typeString = "HWRK";
+			else if (type.name().equals("QUIZ"))
+				typeString = "QUIZ";
 			else
-				typeString = type.name();
+				typeString = "TEST";
 			
 			
 			String name = tfAssignmentName.getText();
@@ -636,18 +642,20 @@ public class FinalProject extends Application {
 			}
 			
 			java.sql.Date sqlDate = new java.sql.Date(due.getTime());
-			
-			System.out.println(date + "\n" + due);
-			
+						
 			
 			try {
 				String addAssignmentSQL = "INSERT INTO Assignments VALUES(null, '" +
 						course.getCourseID() + "', '" + sqlDate + "', " + points + ", '" +
 						name + "', '" + typeString + "')";
+								
+				stmt.executeUpdate(addAssignmentSQL, Statement.RETURN_GENERATED_KEYS);
 				
-				System.out.println(addAssignmentSQL);
-				
-				int id = stmt.executeUpdate(addAssignmentSQL, Statement.RETURN_GENERATED_KEYS);
+				ResultSet rs = stmt.getGeneratedKeys();
+				int id = 0;
+				if(rs.next()) {
+					id = rs.getInt(1);
+				}
 				
 				Assignment assignment = new Assignment(id, due, points, name, type);
 				course.addAssignment(assignment);
@@ -733,6 +741,12 @@ public class FinalProject extends Application {
 				return;
 			}
 			
+			try {
+				course.assignAll();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+			
 			ArrayList<StudentRecord> records = course.getRecords();
 			if(records.size() == 0) {
 				message("Error, this course has no Student Records", Color.RED);
@@ -741,6 +755,7 @@ public class FinalProject extends Application {
 			
 			cbStudentRecords.getItems().clear();
 			cbStudentRecords.getItems().addAll(records);
+			
 			
 			message("Course succcessfully chosen, now choose a Student Record", Color.GREEN);
 			
@@ -797,9 +812,24 @@ public class FinalProject extends Application {
 			
 			if(rbRaw.isSelected()) {
 				course.gradeAssignment(record, assignment.getID(), givenGrade);
+				
 			} else if (rbPercentage.isSelected()) {
-				course.gradeAssignment(record, assignment.getID(), (givenGrade/100.0) * assignment.getPoints());
+				givenGrade = (givenGrade/100.0) * assignment.getPoints();
+				course.gradeAssignment(record, assignment.getID(), givenGrade);
 			}
+			
+			double gradeDecimal = givenGrade / assignment.getPoints();
+			
+			try {
+				String addGrade = "INSERT INTO Grades VALUES('" + course.getCourseID() +
+						"', " + record.getID() + ", " + assignment.getID() + ", " + gradeDecimal + ")";
+				
+				stmt.executeUpdate(addGrade);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
+			
+			
 			
 			message("Assignment " + assignment.getName() + " Successfully graded!", Color.GREEN);
 			

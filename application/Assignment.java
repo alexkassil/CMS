@@ -81,7 +81,7 @@ public class Assignment implements Cloneable {
 	
 	@Override
 	public String toString() {
-		return name + " " + points + " point(s)";
+		return id + " " + name + " " + points + " point(s)";
 	}
 	
 	public String assignmentInfo() {
