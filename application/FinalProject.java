@@ -41,7 +41,7 @@ public class FinalProject extends Application {
 	public void start(Stage primaryStage) {
 		// Main pane
 		BorderPane pane = new BorderPane();
-
+		
 		// Pane for ComboBox
 		FlowPane pickPane = new FlowPane();
 		pickPane.setPadding(new Insets(10, 10, 10, 10));
@@ -146,7 +146,7 @@ public class FinalProject extends Application {
 				double quizWeight = rset.getDouble(3);
 				double testWeight = rset.getDouble(4);
 				
-				//System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
+				System.out.println(courseID + " " + hwWeight + " " + quizWeight + " " + testWeight);
 				Course course = new Course(courseID, hwWeight, quizWeight, testWeight);
 				courses.add(course);
 			}
@@ -353,7 +353,15 @@ public class FinalProject extends Application {
 			}
 			
 			courses.add(newCourse);
-			//System.out.println(newCourse.weights());
+			
+			String addCourse = "INSERT INTO Courses VALUES('" + courseName +
+					"', " + hwPercent + ", " + quizPercent + ", " + testPercent + ")";
+						
+			try {
+				stmt.executeUpdate(addCourse);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 			
 			message("Course " + courseName + " added", Color.GREEN);
 			
@@ -473,12 +481,6 @@ public class FinalProject extends Application {
 		addStudent.add(courseID, 0, 0);
 		addStudent.add(cbCourses, 1, 0);
 
-		Text studentID = new Text("Student ID: ");
-		TextField tfStudentID = new TextField();
-
-		addStudent.add(studentID, 0, 1);
-		addStudent.add(tfStudentID, 1, 1);
-
 		Text studentName = new Text("Student Name: ");
 		TextField tfStudentName = new TextField();
 
@@ -497,13 +499,7 @@ public class FinalProject extends Application {
 				return;
 			}
 			
-			int id = -1;
-			try {
-				id = Integer.parseInt(tfStudentID.getText());
-			} catch(Exception ex) {
-				message("Enter integer for Student ID", Color.RED);
-				return;
-			}
+			
 			String name = tfStudentName.getText();
 			
 			if(name.equals("")) {
@@ -511,15 +507,26 @@ public class FinalProject extends Application {
 				return;
 			}
 			
-			StudentRecord record = new StudentRecord(name, id);
-			if(course.getRecords().contains(record)) {
-				message("Course " + course + " already contains student with id " + id, Color.RED);
-				return;
+			
+			
+			
+			String addRecord = "INSERT INTO StudentRecords VALUES(null, '" +
+					course.getCourseID() + "', '" + name + "')";
+			
+			System.out.println(addRecord);
+			
+			try {
+				int id = stmt.executeUpdate(addRecord, Statement.RETURN_GENERATED_KEYS); 
+				
+				StudentRecord record = new StudentRecord(name, id);
+				course.addRecord(record);
+				
+			} catch (SQLException ex) {
+				ex.printStackTrace();
 			}
+				
 			
-			course.addRecord(record);
-			
-			
+
 			
 			message("Sucessfully added Student Record to Course " + course, Color.GREEN);
 			
