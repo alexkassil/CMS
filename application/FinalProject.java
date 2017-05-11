@@ -384,33 +384,27 @@ public class FinalProject extends Application {
 		updateCourse.add(courseID, 0, 0);
 		updateCourse.add(cbCourses, 1, 0);
 
-		Text newCourseID = new Text("New Course ID: ");
-		TextField tfNewCourseID = new TextField();
-
-		updateCourse.add(newCourseID, 0, 1);
-		updateCourse.add(tfNewCourseID, 1, 1);
-
 		Text newHwWeight = new Text("New HW Weight: ");
 		TextField tfNewHwWeight = new TextField();
 
-		updateCourse.add(newHwWeight, 0, 2);
-		updateCourse.add(tfNewHwWeight, 1, 2);
+		updateCourse.add(newHwWeight, 0, 1);
+		updateCourse.add(tfNewHwWeight, 1, 1);
 
 		Text newQuizWeight = new Text("New Quiz Weight: ");
 		TextField tfNewQuizWeight = new TextField();
 
-		updateCourse.add(newQuizWeight, 0, 3);
-		updateCourse.add(tfNewQuizWeight, 1, 3);
+		updateCourse.add(newQuizWeight, 0, 2);
+		updateCourse.add(tfNewQuizWeight, 1, 2);
 
 		Text newTestWeight = new Text("New Test Weight: ");
 		TextField tfNewTestWeight = new TextField();
 
-		updateCourse.add(newTestWeight, 0, 4);
-		updateCourse.add(tfNewTestWeight, 1, 4);
+		updateCourse.add(newTestWeight, 0, 3);
+		updateCourse.add(tfNewTestWeight, 1, 3);
 
 		Button btUpdateCourse = new Button("Update Course");
 
-		updateCourse.add(btUpdateCourse, 1, 5);
+		updateCourse.add(btUpdateCourse, 1, 4);
 
 		// Logic
 		
@@ -421,7 +415,6 @@ public class FinalProject extends Application {
 				return;
 			}
 			
-			String courseName = tfNewCourseID.getText();
 			double hw = 0;
 			double quiz = 0;
 			double test = 0;
@@ -429,17 +422,6 @@ public class FinalProject extends Application {
 			double quizPercent = 0;
 			double testPercent = 0;
 			
-			if(courseName.length() < 3) {
-				message("Course ID must be at least 3 characters", Color.RED);
-				return;
-			}
-			
-			for(Course c : courses) {
-				if(c.getCourseID().equals(courseName)) {
-					message("Other course already has Course ID " + courseName, Color.RED);
-					return;
-				}
-			}
 			
 			try {
 				hw = Double.parseDouble(tfNewHwWeight.getText());
@@ -455,10 +437,20 @@ public class FinalProject extends Application {
 			quizPercent = quiz / total;
 			testPercent = test / total;
 			
-			course.setCourseID(courseName);
 			course.setHomeworkWeight(hwPercent);
 			course.setQuizWeight(quizPercent);
 			course.setTestWeight(testPercent);
+			
+			String updateCourseQ = "UPDATE Courses SET hwWeight = " + hwPercent + ", "
+					+ "quizWeight = " + quizPercent + ", testWeight = " + testPercent +
+					" WHERE courseID = '" + course.getCourseID() + "'";
+			
+			System.out.println(updateCourseQ);
+			try {
+				stmt.executeUpdate(updateCourseQ);
+			} catch (SQLException ex) {
+				ex.printStackTrace();
+			}
 			
 			message("Successfully updated Course", Color.GREEN);
 			
@@ -484,12 +476,12 @@ public class FinalProject extends Application {
 		Text studentName = new Text("Student Name: ");
 		TextField tfStudentName = new TextField();
 
-		addStudent.add(studentName, 0, 2);
-		addStudent.add(tfStudentName, 1, 2);
+		addStudent.add(studentName, 0, 1);
+		addStudent.add(tfStudentName, 1, 1);
 
 		Button btAddStudentRecord = new Button("Add Student Record");
 
-		addStudent.add(btAddStudentRecord, 1, 3);
+		addStudent.add(btAddStudentRecord, 1, 2);
 
 		// Logic
 		btAddStudentRecord.setOnAction(e -> {
@@ -572,24 +564,24 @@ public class FinalProject extends Application {
 		Text assignmentName = new Text("Assignment Name: ");
 		TextField tfAssignmentName = new TextField();
 		
-		addAssignment.add(assignmentName, 0, 3);
-		addAssignment.add(tfAssignmentName, 1, 3);
+		addAssignment.add(assignmentName, 0, 2);
+		addAssignment.add(tfAssignmentName, 1, 2);
 		
 		Text assignmentPoints = new Text("Assignment Points: ");
 		TextField tfAssignmentPoints = new TextField();
 		
-		addAssignment.add(assignmentPoints, 0, 4);
-		addAssignment.add(tfAssignmentPoints, 1, 4);
+		addAssignment.add(assignmentPoints, 0, 3);
+		addAssignment.add(tfAssignmentPoints, 1, 3);
 		
 		Text dueDate = new Text("Due Date: (MM-dd-yyyy) ");
 		TextField tfDueDate = new TextField();
 		
-		addAssignment.add(dueDate, 0, 5);
-		addAssignment.add(tfDueDate, 1, 5);
+		addAssignment.add(dueDate, 0, 4);
+		addAssignment.add(tfDueDate, 1, 4);
 		
 		Button btAddAssignment = new Button("Add Assignment");
 		
-		addAssignment.add(btAddAssignment, 1, 6);
+		addAssignment.add(btAddAssignment, 1, 5);
 		
 		// Logic
 		
