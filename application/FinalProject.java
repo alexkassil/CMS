@@ -19,9 +19,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontPosture;
-import javafx.scene.text.FontWeight;
+import javafx.scene.chart.*;
 import javafx.scene.text.Text;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
@@ -29,7 +27,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 public class FinalProject extends Application {
@@ -53,7 +50,7 @@ public class FinalProject extends Application {
 
 		// ComboBox Options
 		cb.getItems().addAll("Create Course", "Update Course", "Add Student Record", "Add Assignment", 
-				"Grade Assignment", "View Grades");
+				"Grade Assignment", "View Grades", "View Graphs");
 
 		// Selecting options
 		cb.setOnAction(e -> {
@@ -69,6 +66,8 @@ public class FinalProject extends Application {
 				pane.setCenter(gradeAssignment());
 			} else if (cb.getValue().equals("View Grades")) {
 				pane.setCenter(viewGrades());
+			} else if (cb.getValue().equals("View Graphs")) {
+				pane.setCenter(viewGraphs());
 			}
 			clear();
 		});
@@ -277,6 +276,42 @@ public class FinalProject extends Application {
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
+	}
+	
+	public BorderPane viewGraphs() {
+		BorderPane pane = new BorderPane();
+		
+		ComboBox<Course> cbCourses = coursesComboBox();
+
+		pane.setTop(cbCourses);
+		pane.setAlignment(cbCourses, Pos.CENTER);
+		
+		cbCourses.setOnAction(e -> {
+			Course course = cbCourses.getValue();
+			
+			final CategoryAxis xAxis = new CategoryAxis();
+			xAxis.setLabel("Student");
+			final NumberAxis yAxis = new NumberAxis();
+			yAxis.setLabel("Grade");
+			final BarChart<String, Number> barChart = new BarChart<String, Number>(xAxis, yAxis);
+
+			XYChart.Series series = new XYChart.Series();
+			series.setName("Student");
+			
+			ArrayList<StudentRecord> records = course.getRecords();
+			
+			for(StudentRecord r : records) {
+				series.getData().add(new XYChart.Data(r.getName(), course.getGrade(r)));
+			}
+			
+			barChart.getData().add(series);
+			
+			pane.setCenter(barChart);
+			
+		});
+		
+		return pane;
+		
 	}
 
 	public GridPane createCourse() {
