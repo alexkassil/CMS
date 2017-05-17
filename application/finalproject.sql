@@ -1,4 +1,4 @@
-/* Reset Final Project Database */
+ /* Reset Final Project Database */
 
 drop database finalproject;
 create database finalproject;
@@ -102,7 +102,5 @@ insert into Grades values('Comp 232', 6, 9, .54);
 insert into Grades values('Comp 232', 6, 10, .87);
 insert into Grades values('Comp 232', 6, 11, .9);
 insert into Grades values('Comp 232', 6, 12, 1);
-
-
 
 commit;
